@@ -28,88 +28,104 @@ def check_grid(position, board):
     return row, col
 
 
-# get board state
-def read_board(cirs, rcirs, ycirs):
-    board = np.zeros((6, 7))
+# converts detected circle data to an array
+def to_array(cirs, rcirs, ycirs, img):
+    board = np.zeros((6, 7)) # ROW AND COLUMN COUNT
 
     for cir in cirs[0, :]:
         for rcir in rcirs[0, :]:
             if (cir[0] - cir[2] / 2 < rcir[0] < cir[0] + cir[2] / 2) and (
                 cir[1] - cir[2] / 2 < rcir[1] < cir[1] + cir[2] / 2
             ):
-                row, col = check_grid(rcir, blurred)
+                row, col = check_grid(rcir, img)
                 board[col][row] = 1
 
         for ycir in ycirs[0, :]:
             if (cir[0] - cir[2] / 2 < ycir[0] < cir[0] + cir[2] / 2) and (
                 cir[1] - cir[2] / 2 < ycir[1] < cir[1] + cir[2] / 2
             ):
-                row, col = check_grid(ycir, blurred)
+                row, col = check_grid(ycir, img)
                 board[col][row] = 2
 
     return np.flip(board)
 
 
+# image preprocessing
+def preprocess(img):
+
+    # standardize image size and blur
+    desired_width = 800
+    aspect_ratio = desired_width / img.shape[1]
+    desired_height = int(img.shape[0] * aspect_ratio)
+    dim = (desired_width, desired_height)
+    resized = cv.resize(img, dsize=dim, interpolation=cv.INTER_AREA)
+    blur = cv.medianBlur(resized, 5)
+
+    # get image types
+    hsv = cv.cvtColor(blur, cv.COLOR_BGR2HSV)
+    gray = cv.cvtColor(blur, cv.COLOR_BGR2GRAY)
+
+    return blur, hsv, gray
+
+
+# performs hough transforms
+def hough(img):
+    blur, hsv, gray = preprocess(img)
+
+    # hough transform on all circles
+    cirs = cv.HoughCircles(
+        gray, cv.HOUGH_GRADIENT, 1, 75, param1=50, param2=30, minRadius=20, maxRadius=50
+    )
+    if cirs is not None:
+        cirs = np.uint16(np.around(cirs))
+        for i in cirs[0, :]:
+            cv.circle(blur, (i[0], i[1]), i[2], (255, 0, 0), 2)
+            cv.circle(blur, (i[0], i[1]), 2, (0, 0, 0), 3)
+
+    # hough tranform on red circles
+    rcirs = cv.HoughCircles(
+        red_mask(hsv),
+        cv.HOUGH_GRADIENT,
+        2,
+        75,
+        param1=50,
+        param2=30,
+        minRadius=20,
+        maxRadius=50,
+    )
+    if rcirs is not None:
+        rcirs = np.uint16(np.around(rcirs))
+        for i in rcirs[0, :]:
+            cv.circle(blur, (i[0], i[1]), round(i[2] / 2), (0, 255, 255), 4)
+
+    # hough tranform on yellow circles
+    ycirs = cv.HoughCircles(
+        yellow_mask(hsv),
+        cv.HOUGH_GRADIENT,
+        2,
+        75,
+        param1=50,
+        param2=30,
+        minRadius=1,
+        maxRadius=50,
+    )
+    if ycirs is not None:
+        ycirs = np.uint16(np.around(ycirs))
+        for i in ycirs[0, :]:
+            cv.circle(blur, (i[0], i[1]), round(i[2] / 2), (0, 0, 255), 4)
+
+    return blur, cirs, rcirs, ycirs
+
+
 # read in the file
 img = cv.imread(sys.argv[1], 1)
 
-# standardize image size and blur
-desired_width = 800
-aspect_ratio = desired_width / img.shape[1]
-desired_height = int(img.shape[0] * aspect_ratio)
-dim = (desired_width, desired_height)
-resized = cv.resize(img, dsize=dim, interpolation=cv.INTER_AREA)
-blurred = cv.medianBlur(resized, 5)
-
-# get image types
-hsv = cv.cvtColor(blurred, cv.COLOR_BGR2HSV)
-gray = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)
-
-# hough transform on all circles
-circles = cv.HoughCircles(
-    gray, cv.HOUGH_GRADIENT, 1, 75, param1=50, param2=30, minRadius=20, maxRadius=50
-)
-if circles is not None:
-    circles = np.uint16(np.around(circles))
-    for i in circles[0, :]:
-        cv.circle(blurred, (i[0], i[1]), i[2], (255, 0, 0), 2)
-        cv.circle(blurred, (i[0], i[1]), 2, (0, 0, 0), 3)
-
-# hough tranform on red circles
-red_circles = cv.HoughCircles(
-    red_mask(hsv),
-    cv.HOUGH_GRADIENT,
-    2,
-    75,
-    param1=50,
-    param2=30,
-    minRadius=20,
-    maxRadius=50,
-)
-if red_circles is not None:
-    red_circles = np.uint16(np.around(red_circles))
-    for i in red_circles[0, :]:
-        cv.circle(blurred, (i[0], i[1]), round(i[2] / 2), (0, 255, 255), 4)
-
-# hough tranform on yellow circles
-yellow_circles = cv.HoughCircles(
-    yellow_mask(hsv),
-    cv.HOUGH_GRADIENT,
-    2,
-    75,
-    param1=50,
-    param2=30,
-    minRadius=1,
-    maxRadius=50,
-)
-if yellow_circles is not None:
-    yellow_circles = np.uint16(np.around(yellow_circles))
-    for i in yellow_circles[0, :]:
-        cv.circle(blurred, (i[0], i[1]), round(i[2] / 2), (0, 0, 255), 4)
+final_img, circles, red_circles, yellow_circles = hough(img)
 
 # display results
-cv.imshow("detected circles", blurred)
+cv.imshow("detected circles", final_img)
 cv.waitKey(0)
 cv.destroyAllWindows()
 
-print(read_board(circles, red_circles, yellow_circles))
+# finale
+print(to_array(circles, red_circles, yellow_circles, final_img))
