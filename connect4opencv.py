@@ -673,6 +673,9 @@ def hough(img):
     return blur, cirs, rcirs, ycirs
 
 
+# VALID BOARD CHECKER FUNCTION
+
+# WRITE IN FROM VIDEO, UPDATING EVERY TWO SECONDS OR SO
 # read in the file
 img = cv.imread(sys.argv[1], 1)
 
