@@ -575,14 +575,14 @@ def red_mask(board):
 
 # check position in grid
 def check_grid(position, board):
-    row = math.floor(position[0] / (board.shape[0] / 6))  # ROW_COUNT
-    col = math.floor(position[1] / (board.shape[1] / 7))  # COLUMN_COUNT
+    row = math.floor(position[0] / (board.shape[0] / ROW_COUNT))  # ROW_COUNT
+    col = math.floor(position[1] / (board.shape[1] / COLUMN_COUNT))  # COLUMN_COUNT
     return row, col
 
 
 # converts circle data to an workable array
 def to_array(cirs, rcirs, ycirs, img):
-    board = np.zeros((6, 7)) # ROW AND COLUMN COUNT
+    board = np.zeros((ROW_COUNT, COLUMN_COUNT)) # ROW AND COLUMN COUNT
 
     for cir in cirs[0, :]:
         # detect red tokens
