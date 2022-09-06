@@ -694,9 +694,11 @@ def check_board(board):
     player, ai = count_tokens(board)
     if player - ai > 1 or ai - player > 1:
         valid = False
-    for c in range(COLUMN_COUNT-1):
-        for r in range(ROW_COUNT-1):
-            if (board[r+1][c] == PLAYER_PIECE or board[r+1][c] == AI_PIECE) and board[r][c] == 0:
+    for c in range(COLUMN_COUNT - 1):
+        for r in range(ROW_COUNT - 1):
+            if (
+                board[r + 1][c] == PLAYER_PIECE or board[r + 1][c] == AI_PIECE
+            ) and board[r][c] == 0:
                 valid = False
     return valid
 
