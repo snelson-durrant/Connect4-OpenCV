@@ -574,7 +574,7 @@ def red_mask(board):
 
 
 # check position in grid
-def check_grid(position, board):
+def grid_pos(position, board):
     row = math.floor(position[0] / (board.shape[0] / ROW_COUNT))  # ROW_COUNT
     col = math.floor(position[1] / (board.shape[1] / COLUMN_COUNT))  # COLUMN_COUNT
     return row, col
@@ -590,14 +590,14 @@ def to_array(cirs, rcirs, ycirs, img):
             if (cir[0] - cir[2] / 2 < rcir[0] < cir[0] + cir[2] / 2) and (
                 cir[1] - cir[2] / 2 < rcir[1] < cir[1] + cir[2] / 2
             ):
-                row, col = check_grid(rcir, img)
+                row, col = grid_pos(rcir, img)
                 board[col][row] = 1
         # detect yellow tokens
         for ycir in ycirs[0, :]:
             if (cir[0] - cir[2] / 2 < ycir[0] < cir[0] + cir[2] / 2) and (
                 cir[1] - cir[2] / 2 < ycir[1] < cir[1] + cir[2] / 2
             ):
-                row, col = check_grid(ycir, img)
+                row, col = grid_pos(ycir, img)
                 board[col][row] = 2
 
     return np.flip(board)
@@ -674,9 +674,32 @@ def hough(img):
 
 
 # VIDEO WARPER FUNCTION
+# qr codes on board itself?
 
 
-# VALID BOARD CHECKER FUNCTION
+def count_tokens(board):
+    player = 0
+    ai = 0
+    for c in range(COLUMN_COUNT):
+        for r in range(ROW_COUNT):
+            if board[r][c] == PLAYER_PIECE:
+                player += 1
+            if board[r][c] == AI_PIECE:
+                ai += 1
+    return player, ai
+
+
+def check_board(board):
+    valid = True
+    player, ai = count_tokens(board)
+    if player - ai > 1 or ai - player > 1:
+        valid = False
+    for c in range(COLUMN_COUNT-1):
+        for r in range(ROW_COUNT-1):
+            if (board[r+1][c] == PLAYER_PIECE or board[r+1][c] == AI_PIECE) and board[r][c] == 0:
+                valid = False
+    return valid
+
 
 
 # WRITE IN FROM VIDEO, UPDATING EVERY TWO SECONDS OR SO
@@ -693,3 +716,4 @@ cv.destroyAllWindows()
 # finale
 game_board = to_array(circles, red_circles, yellow_circles, final_img)
 print(get_best_move(game_board, MINIMAX_DEPTH))
+print(check_board(game_board))
