@@ -573,36 +573,6 @@ def red_mask(board):
     return mask + mask2
 
 
-# check position in grid
-def grid_pos(position, board):
-    row = math.floor(position[0] / (board.shape[0] / ROW_COUNT))  # ROW_COUNT
-    col = math.floor(position[1] / (board.shape[1] / COLUMN_COUNT))  # COLUMN_COUNT
-    return row, col
-
-
-# converts circle data to an workable array
-def to_array(cirs, rcirs, ycirs, img):
-    board = np.zeros((ROW_COUNT, COLUMN_COUNT)) # ROW AND COLUMN COUNT
-
-    for cir in cirs[0, :]:
-        # detect red tokens
-        for rcir in rcirs[0, :]:
-            if (cir[0] - cir[2] / 2 < rcir[0] < cir[0] + cir[2] / 2) and (
-                cir[1] - cir[2] / 2 < rcir[1] < cir[1] + cir[2] / 2
-            ):
-                row, col = grid_pos(rcir, img)
-                board[col][row] = 1
-        # detect yellow tokens
-        for ycir in ycirs[0, :]:
-            if (cir[0] - cir[2] / 2 < ycir[0] < cir[0] + cir[2] / 2) and (
-                cir[1] - cir[2] / 2 < ycir[1] < cir[1] + cir[2] / 2
-            ):
-                row, col = grid_pos(ycir, img)
-                board[col][row] = 2
-
-    return np.flip(board)
-
-
 # image preprocessing
 def preprocess(img):
 
@@ -673,6 +643,36 @@ def hough(img):
     return blur, cirs, rcirs, ycirs
 
 
+# check position in grid
+def grid_pos(position, board):
+    row = math.floor(position[0] / (board.shape[0] / ROW_COUNT))
+    col = math.floor(position[1] / (board.shape[1] / COLUMN_COUNT))
+    return row, col
+
+
+# converts circle data to an workable array
+def to_array(cirs, rcirs, ycirs, img):
+    board = np.zeros((ROW_COUNT, COLUMN_COUNT))
+
+    for cir in cirs[0, :]:
+        # detect red tokens
+        for rcir in rcirs[0, :]:
+            if (cir[0] - cir[2] / 2 < rcir[0] < cir[0] + cir[2] / 2) and (
+                cir[1] - cir[2] / 2 < rcir[1] < cir[1] + cir[2] / 2
+            ):
+                row, col = grid_pos(rcir, img)
+                board[col][row] = 1
+        # detect yellow tokens
+        for ycir in ycirs[0, :]:
+            if (cir[0] - cir[2] / 2 < ycir[0] < cir[0] + cir[2] / 2) and (
+                cir[1] - cir[2] / 2 < ycir[1] < cir[1] + cir[2] / 2
+            ):
+                row, col = grid_pos(ycir, img)
+                board[col][row] = 2
+
+    return np.flip(board)
+
+
 # VIDEO WARPER FUNCTION
 # qr codes on board itself?
 
@@ -699,7 +699,6 @@ def check_board(board):
             if (board[r+1][c] == PLAYER_PIECE or board[r+1][c] == AI_PIECE) and board[r][c] == 0:
                 valid = False
     return valid
-
 
 
 # WRITE IN FROM VIDEO, UPDATING EVERY TWO SECONDS OR SO
