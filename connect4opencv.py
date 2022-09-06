@@ -28,18 +28,19 @@ def check_grid(position, board):
     return row, col
 
 
-# converts detected circle data to an array
+# converts circle data to an workable array
 def to_array(cirs, rcirs, ycirs, img):
     board = np.zeros((6, 7)) # ROW AND COLUMN COUNT
 
     for cir in cirs[0, :]:
+        # detect red tokens
         for rcir in rcirs[0, :]:
             if (cir[0] - cir[2] / 2 < rcir[0] < cir[0] + cir[2] / 2) and (
                 cir[1] - cir[2] / 2 < rcir[1] < cir[1] + cir[2] / 2
             ):
                 row, col = check_grid(rcir, img)
                 board[col][row] = 1
-
+        # detect yellow tokens
         for ycir in ycirs[0, :]:
             if (cir[0] - cir[2] / 2 < ycir[0] < cir[0] + cir[2] / 2) and (
                 cir[1] - cir[2] / 2 < ycir[1] < cir[1] + cir[2] / 2
@@ -72,17 +73,18 @@ def preprocess(img):
 def hough(img):
     blur, hsv, gray = preprocess(img)
 
-    # hough transform on all circles
+    # hough transform to find all circles
     cirs = cv.HoughCircles(
         gray, cv.HOUGH_GRADIENT, 1, 75, param1=50, param2=30, minRadius=20, maxRadius=50
     )
     if cirs is not None:
         cirs = np.uint16(np.around(cirs))
         for i in cirs[0, :]:
+            # mark all circles
             cv.circle(blur, (i[0], i[1]), i[2], (255, 0, 0), 2)
             cv.circle(blur, (i[0], i[1]), 2, (0, 0, 0), 3)
 
-    # hough tranform on red circles
+    # hough tranform to find red circles
     rcirs = cv.HoughCircles(
         red_mask(hsv),
         cv.HOUGH_GRADIENT,
@@ -96,9 +98,10 @@ def hough(img):
     if rcirs is not None:
         rcirs = np.uint16(np.around(rcirs))
         for i in rcirs[0, :]:
+            # mark red circles
             cv.circle(blur, (i[0], i[1]), round(i[2] / 2), (0, 255, 255), 4)
 
-    # hough tranform on yellow circles
+    # hough tranform to find yellow circles
     ycirs = cv.HoughCircles(
         yellow_mask(hsv),
         cv.HOUGH_GRADIENT,
@@ -112,6 +115,7 @@ def hough(img):
     if ycirs is not None:
         ycirs = np.uint16(np.around(ycirs))
         for i in ycirs[0, :]:
+            # mark yellow circles
             cv.circle(blur, (i[0], i[1]), round(i[2] / 2), (0, 0, 255), 4)
 
     return blur, cirs, rcirs, ycirs
