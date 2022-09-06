@@ -673,7 +673,11 @@ def hough(img):
     return blur, cirs, rcirs, ycirs
 
 
+# VIDEO WARPER FUNCTION
+
+
 # VALID BOARD CHECKER FUNCTION
+
 
 # WRITE IN FROM VIDEO, UPDATING EVERY TWO SECONDS OR SO
 # read in the file
