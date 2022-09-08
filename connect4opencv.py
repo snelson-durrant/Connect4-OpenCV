@@ -4,14 +4,6 @@ import cv2 as cv
 import math
 from connect4ai import *
 
-ROW_COUNT = 6
-COLUMN_COUNT = 7
-
-PLAYER_PIECE = 1
-AI_PIECE = 2
-
-MINIMAX_DEPTH = 6
-
 
 # get yellow mask
 def yellow_mask(board):
