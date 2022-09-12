@@ -119,15 +119,14 @@ def grid_pos(position, board):
     return row, col
 
 
-# FIX
 # converts circle data to an workable array
 def to_array(cirs, rcirs, ycirs, img):
     board = np.zeros((ROW_COUNT, COLUMN_COUNT))
-    if cirs is None:
+    if cirs is None: # FIX
         for cir in cirs[0, :]:
 
             # detect red tokens
-            if rcirs is None:
+            if rcirs is None: # FIX
                 for rcir in rcirs[0, :]:
                     if (
                         float(cir[0]) - float(cir[2])
@@ -142,7 +141,7 @@ def to_array(cirs, rcirs, ycirs, img):
                         board[row][col] = 1
 
             # detect yellow tokens
-            if ycirs is None:
+            if ycirs is None: # FIX
                 for ycir in ycirs[0, :]:
                     if (
                         float(cir[0]) - float(cir[2])
