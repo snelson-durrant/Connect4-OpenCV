@@ -112,13 +112,10 @@ def hough(img):
     return blur, cirs, rcirs, ycirs
 
 
-# NEEDS MUCH WORK
-# FIX COLUMN AND ROW ERROR
-# THEN IT SHOULD WORK
 # check position in grid
 def grid_pos(position, board):
-    row = math.floor((position[0] / board.shape[0]) * ROW_COUNT)
-    col = math.floor((position[1] / board.shape[1]) * COLUMN_COUNT)
+    row = math.floor((position[1] / board.shape[0]) * ROW_COUNT)
+    col = math.floor((position[0] / board.shape[1]) * COLUMN_COUNT)
     return row, col
 
 
@@ -139,7 +136,7 @@ def to_array(cirs, rcirs, ycirs, img):
                 < float(cir[1]) + float(cir[2])
             ):
                 row, col = grid_pos(cir, img)
-                board[col][row] = 1
+                board[row][col] = 1
         # detect yellow tokens
         for ycir in ycirs[0, :]:
             if (
@@ -152,7 +149,7 @@ def to_array(cirs, rcirs, ycirs, img):
                 < float(cir[1]) + float(cir[2])
             ):
                 row, col = grid_pos(cir, img)
-                board[col][row] = 2
+                board[row][col] = 2
 
     return board
 
