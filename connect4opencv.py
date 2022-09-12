@@ -89,14 +89,22 @@ def hough(img):
             # mark yellow circles
             cv.circle(blur, (i[0], i[1]), round(i[2] / 2), (0, 0, 255), 4)
 
+    for i in range(1, ROW_COUNT):
+        cv.line(blur, (0, round(blur.shape[0] * (float(i) / ROW_COUNT))), (blur.shape[1], round(blur.shape[0] * (float(i) / ROW_COUNT))), (255, 255, 255), thickness=2, lineType=8)
+
+    for i in range(1, COLUMN_COUNT):
+        cv.line(blur, (round(blur.shape[1] * (float(i) / COLUMN_COUNT)), 0), (round(blur.shape[1] * (float(i) / COLUMN_COUNT)), blur.shape[0]), (255, 255, 255), thickness=2, lineType=8)
+
     return blur, cirs, rcirs, ycirs
 
 
 # NEEDS MUCH WORK
+# FIX COLUMN AND ROW ERROR
+# THEN IT SHOULD WORK
 # check position in grid
 def grid_pos(position, board):
-    row = math.floor(position[0] / (board.shape[0] / (ROW_COUNT - 0.5)))
-    col = math.floor(position[1] / (board.shape[1] / (COLUMN_COUNT - 0.5)))
+    row = math.floor((position[0] / board.shape[0]) * ROW_COUNT)
+    col = math.floor((position[1] / board.shape[1]) * COLUMN_COUNT)
     return row, col
 
 
@@ -116,7 +124,7 @@ def to_array(cirs, rcirs, ycirs, img):
                 < float(rcir[1])
                 < float(cir[1]) + float(cir[2])
             ):
-                row, col = grid_pos(rcir, img)
+                row, col = grid_pos(cir, img)
                 board[col][row] = 1
         # detect yellow tokens
         for ycir in ycirs[0, :]:
@@ -129,13 +137,10 @@ def to_array(cirs, rcirs, ycirs, img):
                 < float(ycir[1])
                 < float(cir[1]) + float(cir[2])
             ):
-                row, col = grid_pos(ycir, img)
+                row, col = grid_pos(cir, img)
                 board[col][row] = 2
 
     return board
-
-
-# VIDEO WARPER FUNCTION?
 
 
 def count_tokens(board):
