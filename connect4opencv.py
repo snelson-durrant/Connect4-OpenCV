@@ -90,10 +90,24 @@ def hough(img):
             cv.circle(blur, (i[0], i[1]), round(i[2] / 2), (0, 0, 255), 4)
 
     for i in range(1, ROW_COUNT):
-        cv.line(blur, (0, round(blur.shape[0] * (float(i) / ROW_COUNT))), (blur.shape[1], round(blur.shape[0] * (float(i) / ROW_COUNT))), (255, 255, 255), thickness=2, lineType=8)
+        cv.line(
+            blur,
+            (0, round(blur.shape[0] * (float(i) / ROW_COUNT))),
+            (blur.shape[1], round(blur.shape[0] * (float(i) / ROW_COUNT))),
+            (255, 255, 255),
+            thickness=2,
+            lineType=8,
+        )
 
     for i in range(1, COLUMN_COUNT):
-        cv.line(blur, (round(blur.shape[1] * (float(i) / COLUMN_COUNT)), 0), (round(blur.shape[1] * (float(i) / COLUMN_COUNT)), blur.shape[0]), (255, 255, 255), thickness=2, lineType=8)
+        cv.line(
+            blur,
+            (round(blur.shape[1] * (float(i) / COLUMN_COUNT)), 0),
+            (round(blur.shape[1] * (float(i) / COLUMN_COUNT)), blur.shape[0]),
+            (255, 255, 255),
+            thickness=2,
+            lineType=8,
+        )
 
     return blur, cirs, rcirs, ycirs
 
