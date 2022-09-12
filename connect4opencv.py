@@ -1,4 +1,3 @@
-import sys
 import numpy as np
 import cv2 as cv
 import math
@@ -93,10 +92,11 @@ def hough(img):
     return blur, cirs, rcirs, ycirs
 
 
+# NEEDS MUCH WORK
 # check position in grid
 def grid_pos(position, board):
-    row = math.floor(position[0] / (board.shape[0] / ROW_COUNT))
-    col = math.floor(position[1] / (board.shape[1] / COLUMN_COUNT))
+    row = math.floor(position[0] / (board.shape[0] / (ROW_COUNT - 0.5)))
+    col = math.floor(position[1] / (board.shape[1] / (COLUMN_COUNT - 0.5)))
     return row, col
 
 
@@ -107,24 +107,35 @@ def to_array(cirs, rcirs, ycirs, img):
     for cir in cirs[0, :]:
         # detect red tokens
         for rcir in rcirs[0, :]:
-            if (cir[0] - cir[2] / 2 < rcir[0] < cir[0] + cir[2] / 2) and (
-                cir[1] - cir[2] / 2 < rcir[1] < cir[1] + cir[2] / 2
+            if (
+                float(cir[0]) - float(cir[2])
+                < float(rcir[0])
+                < float(cir[0]) + float(cir[2])
+            ) and (
+                float(cir[1]) - float(cir[2])
+                < float(rcir[1])
+                < float(cir[1]) + float(cir[2])
             ):
                 row, col = grid_pos(rcir, img)
                 board[col][row] = 1
         # detect yellow tokens
         for ycir in ycirs[0, :]:
-            if (cir[0] - cir[2] / 2 < ycir[0] < cir[0] + cir[2] / 2) and (
-                cir[1] - cir[2] / 2 < ycir[1] < cir[1] + cir[2] / 2
+            if (
+                float(cir[0]) - float(cir[2])
+                < float(ycir[0])
+                < float(cir[0]) + float(cir[2])
+            ) and (
+                float(cir[1]) - float(cir[2])
+                < float(ycir[1])
+                < float(cir[1]) + float(cir[2])
             ):
                 row, col = grid_pos(ycir, img)
                 board[col][row] = 2
 
-    return np.flip(board)
+    return board
 
 
-# VIDEO WARPER FUNCTION
-# qr codes on board itself?
+# VIDEO WARPER FUNCTION?
 
 
 def count_tokens(board):
@@ -153,18 +164,24 @@ def check_board(board):
     return valid
 
 
-# WRITE IN FROM VIDEO, UPDATING EVERY TWO SECONDS OR SO
-# read in the file
-img = cv.imread(sys.argv[1], 1)
+game_board = np.zeros((ROW_COUNT, COLUMN_COUNT))
+vid = cv.VideoCapture(1)
 
-final_img, circles, red_circles, yellow_circles = hough(img)
+while not four_in_a_row(game_board, PLAYER_PIECE) or four_in_a_row(
+    game_board, AI_PIECE
+):
 
-# display results
-cv.imshow("detected circles", final_img)
-cv.waitKey(0)
-cv.destroyAllWindows()
+    while cv.waitKey(1) != 27:
 
-# finale
-game_board = to_array(circles, red_circles, yellow_circles, final_img)
-print(get_best_move(game_board, MINIMAX_DEPTH))
-print(check_board(game_board))
+        ret, img = vid.read()
+        final_img, circles, red_circles, yellow_circles = hough(img)
+        # my webcam reads in the video upside down
+        cv.imshow("detected circles", cv.rotate(final_img, cv.ROTATE_180))
+
+    game_board = to_array(circles, red_circles, yellow_circles, final_img)
+    print(game_board)
+    # MORE HERE
+    print(check_board(game_board))
+    print(get_best_move(game_board, MINIMAX_DEPTH))
+
+vid.release()
