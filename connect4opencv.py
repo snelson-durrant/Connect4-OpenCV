@@ -119,14 +119,15 @@ def grid_pos(position, board):
     return row, col
 
 
+# FIX
 # converts circle data to an workable array
 def to_array(cirs, rcirs, ycirs, img):
     board = np.zeros((ROW_COUNT, COLUMN_COUNT))
-    if cir.size() != 0:
+    if cirs is None:
         for cir in cirs[0, :]:
 
             # detect red tokens
-            if rcirs.size() != 0:
+            if rcirs is None:
                 for rcir in rcirs[0, :]:
                     if (
                         float(cir[0]) - float(cir[2])
@@ -141,7 +142,7 @@ def to_array(cirs, rcirs, ycirs, img):
                         board[row][col] = 1
 
             # detect yellow tokens
-            if ycirs.size() != 0:
+            if ycirs is None:
                 for ycir in ycirs[0, :]:
                     if (
                         float(cir[0]) - float(cir[2])
@@ -171,20 +172,20 @@ def count_tokens(board):
 
 
 def check_board(board):
-    valid = True
     player, ai = count_tokens(board)
-    if player - ai > 1 or ai - player > 1:
-        valid = False
+    if player - ai != 1:
+        return False
     for c in range(COLUMN_COUNT - 1):
         for r in range(ROW_COUNT - 1):
             if (
                 board[r + 1][c] == PLAYER_PIECE or board[r + 1][c] == AI_PIECE
             ) and board[r][c] == 0:
-                valid = False
-    return valid
+                return False
+    return True
 
 
 game_board = np.zeros((ROW_COUNT, COLUMN_COUNT))
+# connect to camera
 vid = cv.VideoCapture(1)
 
 while not four_in_a_row(game_board, PLAYER_PIECE) or four_in_a_row(
@@ -199,9 +200,9 @@ while not four_in_a_row(game_board, PLAYER_PIECE) or four_in_a_row(
         cv.imshow("detected circles", cv.rotate(final_img, cv.ROTATE_180))
 
     game_board = to_array(circles, red_circles, yellow_circles, final_img)
-    print(game_board)
+    print_board(game_board)
     # MORE HERE
     print(check_board(game_board))
-    print(get_best_move(game_board, MINIMAX_DEPTH))
+    get_best_move(game_board, MINIMAX_DEPTH)
 
 vid.release()
