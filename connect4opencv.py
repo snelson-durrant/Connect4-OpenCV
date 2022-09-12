@@ -122,34 +122,38 @@ def grid_pos(position, board):
 # converts circle data to an workable array
 def to_array(cirs, rcirs, ycirs, img):
     board = np.zeros((ROW_COUNT, COLUMN_COUNT))
+    if cir.size() != 0:
+        for cir in cirs[0, :]:
 
-    for cir in cirs[0, :]:
-        # detect red tokens
-        for rcir in rcirs[0, :]:
-            if (
-                float(cir[0]) - float(cir[2])
-                < float(rcir[0])
-                < float(cir[0]) + float(cir[2])
-            ) and (
-                float(cir[1]) - float(cir[2])
-                < float(rcir[1])
-                < float(cir[1]) + float(cir[2])
-            ):
-                row, col = grid_pos(cir, img)
-                board[row][col] = 1
-        # detect yellow tokens
-        for ycir in ycirs[0, :]:
-            if (
-                float(cir[0]) - float(cir[2])
-                < float(ycir[0])
-                < float(cir[0]) + float(cir[2])
-            ) and (
-                float(cir[1]) - float(cir[2])
-                < float(ycir[1])
-                < float(cir[1]) + float(cir[2])
-            ):
-                row, col = grid_pos(cir, img)
-                board[row][col] = 2
+            # detect red tokens
+            if rcirs.size() != 0:
+                for rcir in rcirs[0, :]:
+                    if (
+                        float(cir[0]) - float(cir[2])
+                        < float(rcir[0])
+                        < float(cir[0]) + float(cir[2])
+                    ) and (
+                        float(cir[1]) - float(cir[2])
+                        < float(rcir[1])
+                        < float(cir[1]) + float(cir[2])
+                    ):
+                        row, col = grid_pos(cir, img)
+                        board[row][col] = 1
+
+            # detect yellow tokens
+            if ycirs.size() != 0:
+                for ycir in ycirs[0, :]:
+                    if (
+                        float(cir[0]) - float(cir[2])
+                        < float(ycir[0])
+                        < float(cir[0]) + float(cir[2])
+                    ) and (
+                        float(cir[1]) - float(cir[2])
+                        < float(ycir[1])
+                        < float(cir[1]) + float(cir[2])
+                    ):
+                        row, col = grid_pos(cir, img)
+                        board[row][col] = 2
 
     return board
 
