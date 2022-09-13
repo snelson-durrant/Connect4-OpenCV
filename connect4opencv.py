@@ -209,7 +209,7 @@ while True:
         final_img, circles, red_circles, yellow_circles = hough(img)
         # my webcam reads in the video upside down
         cv.imshow("detected circles", cv.rotate(final_img, cv.ROTATE_180))
-        cv.waitKey(100)
+        cv.waitKey(1000)
         # get and check board
         game_board = to_array(circles, red_circles, yellow_circles, final_img)
         board_valid = check_board(circles, red_circles, yellow_circles, game_board)
