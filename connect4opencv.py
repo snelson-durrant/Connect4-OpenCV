@@ -1,5 +1,3 @@
-from array import ArrayType
-from types import NoneType
 import numpy as np
 import cv2 as cv
 import math
