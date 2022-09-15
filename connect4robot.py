@@ -48,9 +48,8 @@ while True:
     s.send(bytes(robot_move))
     print("SENT TO ROBOT!")
 
-    # TODO TEST THIS
     # check move_score for AI win
-    if move_score == 1000:
+    if move_score == 999999:
         break
 
     # reset loop
