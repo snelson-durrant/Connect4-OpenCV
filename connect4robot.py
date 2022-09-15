@@ -2,7 +2,7 @@ import socket
 from connect4ai import *
 from connect4opencv import *
 
-serverMACAddress = '98:d3:41:f5:ca:2a'
+serverMACAddress = "98:d3:41:f5:ca:2a"
 port = 1
 
 # default variables to get started
@@ -13,7 +13,7 @@ diff = 1
 
 # connect to Arduino bluetooth module
 s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-s.connect((serverMACAddress,port))
+s.connect((serverMACAddress, port))
 print("BLUETOOTH CONNECTION SUCCESSFUL!")
 
 # connect to camera
@@ -23,9 +23,9 @@ print("CAMERA CONNECTION SUCCESSFUL!")
 while True:
 
     # waiting for other player's move
-    # runs again if the board isn't valid or if the boards don't have a valid token diff
+    # runs again if the board isn't valid or if the boards aren't different enough
     while not board_valid or same_boards(game_board, prev_board, diff):
-        
+
         # perform hough analysis
         ret, img = vid.read()
         final_img, circles, red_circles, yellow_circles = hough(img)
@@ -39,7 +39,7 @@ while True:
     # check for win
     if four_in_a_row(game_board, PLAYER_PIECE) or four_in_a_row(game_board, AI_PIECE):
         break
-    
+
     # reset loop
     prev_board = game_board
     diff = 2
