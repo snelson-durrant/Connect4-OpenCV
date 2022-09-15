@@ -7,7 +7,7 @@ CAMERA_ID = 1
 
 # get yellow mask
 def yellow_mask(board):
-    lower = np.array([20, 50, 50])
+    lower = np.array([20, 50, 100])
     upper = np.array([30, 255, 255])
     return cv.inRange(board, lower, upper)
 
@@ -16,7 +16,7 @@ def yellow_mask(board):
 def red_mask(board):
     # lower = np.array([0, 50, 50])
     # upper = np.array([10, 255, 255])
-    lower2 = np.array([170, 50, 50])
+    lower2 = np.array([170, 100, 100])
     upper2 = np.array([180, 255, 255])
     # mask = cv.inRange(board, lower, upper)
     mask2 = cv.inRange(board, lower2, upper2)
