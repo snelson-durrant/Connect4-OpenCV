@@ -47,14 +47,13 @@ def hough(img):
 
     # hough transform to find all circles
     cirs = cv.HoughCircles(
-        gray, cv.HOUGH_GRADIENT, 1, 75, param1=50, param2=30, minRadius=20, maxRadius=50
+        gray, cv.HOUGH_GRADIENT, 1, 75, param1=50, param2=30, minRadius=30, maxRadius=50
     )
     if cirs is not None:
         cirs = np.uint16(np.around(cirs))
         for i in cirs[0, :]:
             # mark all circles
             cv.circle(blur, (i[0], i[1]), i[2], (255, 0, 0), 2)
-            cv.circle(blur, (i[0], i[1]), 2, (0, 0, 0), 3)
 
     # hough tranform to find red circles
     rcirs = cv.HoughCircles(
@@ -64,7 +63,7 @@ def hough(img):
         75,
         param1=50,
         param2=30,
-        minRadius=20,
+        minRadius=30,
         maxRadius=50,
     )
     if rcirs is not None:
@@ -81,7 +80,7 @@ def hough(img):
         75,
         param1=50,
         param2=30,
-        minRadius=20,
+        minRadius=30,
         maxRadius=50,
     )
     if ycirs is not None:
@@ -89,6 +88,7 @@ def hough(img):
         for i in ycirs[0, :]:
             # mark yellow circles
             cv.circle(blur, (i[0], i[1]), round(i[2] / 2), (0, 255, 255), 5)
+            print("R" + str(i[2]))
 
     for i in range(1, ROW_COUNT):
         cv.line(
