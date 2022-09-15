@@ -1,7 +1,5 @@
-import numpy as np
 import cv2 as cv
 import math
-import socket
 from connect4ai import *
 
 CAMERA_ID = 1
@@ -9,7 +7,7 @@ CAMERA_ID = 1
 
 # get yellow mask
 def yellow_mask(board):
-    lower = np.array([20, 50, 100])
+    lower = np.array([20, 50, 50])
     upper = np.array([30, 255, 255])
     return cv.inRange(board, lower, upper)
 
@@ -186,52 +184,18 @@ def check_board(cirs, rcirs, ycirs, board):
     return True
 
 
-def compare_boards(board1, board2):
+def same_boards(board1, board2, diff):
+    token_count1 = 0
+    token_count2 = 0
+
     for r in range(ROW_COUNT):
         for c in range(COLUMN_COUNT):
-            if not board1[r][c] == board2[r][c]:
-                return False
+            # counts tokens
+            if board1[r][c] == PLAYER_PIECE or board1[r][c] == AI_PIECE:
+                token_count1 += 1
+            if board2[r][c] == PLAYER_PIECE or board2[r][c] == AI_PIECE:
+                token_count2 += 1
+
+    if token_count1 == token_count2 + diff:
+        return False
     return True
-
-
-game_board = np.zeros((ROW_COUNT, COLUMN_COUNT))
-prev_board = game_board
-board_valid = False
-# connect to camera
-vid = cv.VideoCapture(CAMERA_ID)
-
-serverMACAddress = '98:d3:41:f5:ca:2a'
-port = 1
-s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-s.connect((serverMACAddress,port))
-while 1:
-    text = input()
-    if text == "quit":
-        break
-    s.send(bytes(text, 'UTF-8'))
-s.close()
-
-
-while True:
-
-    # waiting for other player's move
-    while not board_valid or compare_boards(game_board, prev_board):
-
-        ret, img = vid.read()
-        # perform hough analysis
-        final_img, circles, red_circles, yellow_circles = hough(img)
-        # my webcam reads in the video upside down
-        cv.imshow("detected circles", cv.rotate(final_img, cv.ROTATE_180))
-        cv.waitKey(500)
-        # get and check board
-        game_board = to_array(circles, red_circles, yellow_circles, final_img)
-        board_valid = check_board(circles, red_circles, yellow_circles, game_board)
-
-    if four_in_a_row(game_board, PLAYER_PIECE) or four_in_a_row(game_board, AI_PIECE):
-        break
-    prev_board = game_board
-    print(get_best_move(game_board, MINIMAX_DEPTH))
-
-print("game won!")
-vid.release()
-cv.destroyAllWindows()
