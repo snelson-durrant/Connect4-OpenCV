@@ -2,18 +2,8 @@ import socket
 from connect4ai import *
 from connect4opencv import *
 
-MINIMAX_DEPTH = 6
-
 serverMACAddress = '98:d3:41:f5:ca:2a'
 port = 1
-s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-s.connect((serverMACAddress,port))
-while 1:
-    text = input()
-    if text == "quit":
-        break
-    s.send(bytes(text, 'UTF-8'))
-s.close()
 
 # default variables to get started
 game_board = np.zeros((ROW_COUNT, COLUMN_COUNT))
@@ -21,8 +11,14 @@ prev_board = game_board
 board_valid = False
 diff = 1
 
+# connect to Arduino bluetooth module
+s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+s.connect((serverMACAddress,port))
+print("BLUETOOTH CONNECTION SUCCESSFUL!")
+
 # connect to camera
 vid = cv.VideoCapture(CAMERA_ID)
+print("CAMERA CONNECTION SUCCESSFUL!")
 
 while True:
 
@@ -43,12 +39,21 @@ while True:
     # check for win
     if four_in_a_row(game_board, PLAYER_PIECE) or four_in_a_row(game_board, AI_PIECE):
         break
-
+    
+    # reset loop
     prev_board = game_board
     diff = 2
-    print(get_best_move(game_board, MINIMAX_DEPTH))
+
+    # send move to robot
+    robot_move, move_score = get_best_move(game_board, MINIMAX_DEPTH)
+    print_board(game_board)
+    print("move selection: " + str(robot_move))
+    print("move score: " + str(move_score))
+    s.send(bytes(robot_move))
+    print("SENT TO ROBOT!")
 
 # finish
-print("game won!")
+print("game over!")
 vid.release()
 cv.destroyAllWindows()
+s.close()
