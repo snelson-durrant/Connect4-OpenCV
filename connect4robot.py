@@ -2,8 +2,8 @@ import socket
 from connect4ai import *
 from connect4opencv import *
 
-serverMACAddress = "98:d3:41:f5:ca:2a"
-port = 1
+HC05_ADDRESS = "98:d3:41:f5:ca:2a"
+PORT = 1
 
 # default variables to get started
 game_board = np.zeros((ROW_COUNT, COLUMN_COUNT))
@@ -13,7 +13,7 @@ diff = 1
 
 # connect to Arduino bluetooth module
 s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-s.connect((serverMACAddress, port))
+s.connect((HC05_ADDRESS, PORT))
 print("BLUETOOTH CONNECTION SUCCESSFUL!")
 
 # connect to camera
