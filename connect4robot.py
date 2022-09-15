@@ -22,7 +22,7 @@ print("CAMERA CONNECTION SUCCESSFUL!")
 
 while True:
 
-    # waiting for other player's move
+    # waiting for player move
     # runs again if the board isn't valid or if the boards aren't different enough
     while not board_valid or same_boards(game_board, prev_board, diff):
 
@@ -36,13 +36,9 @@ while True:
         game_board = to_array(circles, red_circles, yellow_circles, final_img)
         board_valid = check_board(circles, red_circles, yellow_circles, game_board)
 
-    # check for win
-    if four_in_a_row(game_board, PLAYER_PIECE) or four_in_a_row(game_board, AI_PIECE):
+    # check board for player win
+    if four_in_a_row(game_board, PLAYER_PIECE):
         break
-
-    # reset loop
-    prev_board = game_board
-    diff = 2
 
     # send move to robot
     robot_move, move_score = get_best_move(game_board, MINIMAX_DEPTH)
@@ -51,6 +47,15 @@ while True:
     print("move score: " + str(move_score))
     s.send(bytes(robot_move))
     print("SENT TO ROBOT!")
+
+    # TODO TEST THIS
+    # check move_score for AI win
+    if move_score == 1000:
+        break
+
+    # reset loop
+    prev_board = game_board
+    diff = 2
 
 # finish
 print("game over!")
