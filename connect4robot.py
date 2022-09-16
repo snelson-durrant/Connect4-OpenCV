@@ -20,7 +20,6 @@ print("BLUETOOTH CONNECTION SUCCESSFUL!")
 vid = cv.VideoCapture(CAMERA_ID)
 print("CAMERA CONNECTION SUCCESSFUL!")
 
-# TODO CHECK FOR STALEMATE
 while True:
 
     # waiting for player move

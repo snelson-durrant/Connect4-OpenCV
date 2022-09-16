@@ -16,17 +16,22 @@ int index = 0;
 String dataIn = "";
 bool isReset = true;
 
-int moveServo(Servo servo, int& pos, int& ppos) {
+int moveServo(Servo servo, int &pos, int &ppos)
+{
 
-  if (ppos > pos) {
-    for ( int i = ppos; i >= pos; i--) {
+  if (ppos > pos)
+  {
+    for (int i = ppos; i >= pos; i--)
+    {
       servo.write(i);
       delay(speedDelay);
     }
   }
 
-  if (ppos < pos) {
-    for ( int i = ppos; i <= pos; i++) {
+  if (ppos < pos)
+  {
+    for (int i = ppos; i <= pos; i++)
+    {
       servo.write(i);
       delay(speedDelay);
     }
@@ -36,7 +41,8 @@ int moveServo(Servo servo, int& pos, int& ppos) {
   return 0;
 }
 
-void setup() {
+void setup()
+{
   // initialize servos and bluetooth
   servo01.attach(2);
   servo02.attach(3);
@@ -57,13 +63,16 @@ void setup() {
   servo04.write(servo4PPos);
 }
 
-void loop() {
+void loop()
+{
   // Check for incoming data
-  if (Bluetooth.available() > 0) {
+  if (Bluetooth.available() > 0)
+  {
     dataIn = Bluetooth.readString();
   }
 
-  if (dataIn == "0") {
+  if (dataIn == "0")
+  {
 
     servo1Pos = 0;
     moveServo(servo01, servo1Pos, servo1PPos);
@@ -74,8 +83,9 @@ void loop() {
     servo4Pos = 0;
     moveServo(servo04, servo4Pos, servo4PPos);
     isReset = false;
-
-  } else if (dataIn == "1") {
+  }
+  else if (dataIn == "1")
+  {
 
     servo1Pos = 20;
     moveServo(servo01, servo1Pos, servo1PPos);
@@ -86,8 +96,9 @@ void loop() {
     servo4Pos = 20;
     moveServo(servo04, servo4Pos, servo4PPos);
     isReset = false;
-
-  } else if (dataIn == "2") {
+  }
+  else if (dataIn == "2")
+  {
 
     servo1Pos = 40;
     moveServo(servo01, servo1Pos, servo1PPos);
@@ -98,8 +109,9 @@ void loop() {
     servo4Pos = 40;
     moveServo(servo04, servo4Pos, servo4PPos);
     isReset = false;
-
-  } else if (dataIn == "3") {
+  }
+  else if (dataIn == "3")
+  {
 
     servo1Pos = 60;
     moveServo(servo01, servo1Pos, servo1PPos);
@@ -110,8 +122,9 @@ void loop() {
     servo4Pos = 60;
     moveServo(servo04, servo4Pos, servo4PPos);
     isReset = false;
-
-  } else if (dataIn == "4") {
+  }
+  else if (dataIn == "4")
+  {
 
     servo1Pos = 80;
     moveServo(servo01, servo1Pos, servo1PPos);
@@ -122,8 +135,9 @@ void loop() {
     servo4Pos = 80;
     moveServo(servo04, servo4Pos, servo4PPos);
     isReset = false;
-
-  } else if (dataIn == "5") {
+  }
+  else if (dataIn == "5")
+  {
 
     servo1Pos = 100;
     moveServo(servo01, servo1Pos, servo1PPos);
@@ -134,8 +148,9 @@ void loop() {
     servo4Pos = 100;
     moveServo(servo04, servo4Pos, servo4PPos);
     isReset = false;
-
-  } else if (dataIn == "6") {
+  }
+  else if (dataIn == "6")
+  {
 
     servo1Pos = 120;
     moveServo(servo01, servo1Pos, servo1PPos);
@@ -146,11 +161,13 @@ void loop() {
     servo4Pos = 120;
     moveServo(servo04, servo4Pos, servo4PPos);
     isReset = false;
-
-  } else {
+  }
+  else
+  {
 
     // reset position
-    if (not isReset) {
+    if (not isReset)
+    {
       servo1Pos = 180;
       moveServo(servo01, servo1Pos, servo1PPos);
       servo2Pos = 180;
@@ -161,6 +178,5 @@ void loop() {
       moveServo(servo04, servo4Pos, servo4PPos);
       isReset = true;
     }
-
   }
 }
