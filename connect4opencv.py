@@ -54,6 +54,7 @@ def hough(img):
         for i in cirs[0, :]:
             # mark all circles
             cv.circle(blur, (i[0], i[1]), i[2], (255, 0, 0), 2)
+            cv.circle(blur, (i[0], i[1]), 2, (0, 0, 0), 2)
 
     # hough tranform to find red circles
     rcirs = cv.HoughCircles(
@@ -88,7 +89,6 @@ def hough(img):
         for i in ycirs[0, :]:
             # mark yellow circles
             cv.circle(blur, (i[0], i[1]), round(i[2] / 2), (0, 255, 255), 5)
-            print("R" + str(i[2]))
 
     for i in range(1, ROW_COUNT):
         cv.line(

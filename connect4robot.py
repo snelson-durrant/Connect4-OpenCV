@@ -20,6 +20,7 @@ print("BLUETOOTH CONNECTION SUCCESSFUL!")
 vid = cv.VideoCapture(CAMERA_ID)
 print("CAMERA CONNECTION SUCCESSFUL!")
 
+# TODO CHECK FOR STALEMATE
 while True:
 
     # waiting for player move
@@ -45,7 +46,7 @@ while True:
     print_board(game_board)
     print("move selection: " + str(robot_move))
     print("move score: " + str(move_score))
-    s.send(bytes(robot_move))
+    s.send(str(robot_move).encode())
     print("SENT TO ROBOT!")
 
     # check move_score for AI win
