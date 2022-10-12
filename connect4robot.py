@@ -46,6 +46,10 @@ while True:
     print("move selection: " + str(robot_move))
     print("move score: " + str(move_score))
     # s.send(str(robot_move).encode())
+    # send signal to light LED if win is inevitable
+    # if (move_score > 900000) {
+        # s.send(str("w").encode())
+    # }
     print("SENT TO ROBOT!")
 
     # check move_score for AI win
