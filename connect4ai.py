@@ -3,8 +3,8 @@ import numpy as np
 ROW_COUNT = 6
 COLUMN_COUNT = 7
 
-PLAYER_PIECE = 1
-AI_PIECE = 2
+PLAYER_PIECE = 1 # red
+AI_PIECE = 2 # yellow
 
 MINIMAX_DEPTH = 6
 

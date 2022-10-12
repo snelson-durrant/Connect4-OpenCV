@@ -12,9 +12,9 @@ board_valid = False
 diff = 1
 
 # connect to Arduino bluetooth module
-s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-s.connect((HC05_ADDRESS, PORT))
-print("BLUETOOTH CONNECTION SUCCESSFUL!")
+# s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+# s.connect((HC05_ADDRESS, PORT))
+# print("BLUETOOTH CONNECTION SUCCESSFUL!")
 
 # connect to camera
 vid = cv.VideoCapture(CAMERA_ID)
@@ -45,7 +45,7 @@ while True:
     print_board(game_board)
     print("move selection: " + str(robot_move))
     print("move score: " + str(move_score))
-    s.send(str(robot_move).encode())
+    # s.send(str(robot_move).encode())
     print("SENT TO ROBOT!")
 
     # check move_score for AI win
@@ -60,4 +60,4 @@ while True:
 print("game over!")
 vid.release()
 cv.destroyAllWindows()
-s.close()
+# s.close()

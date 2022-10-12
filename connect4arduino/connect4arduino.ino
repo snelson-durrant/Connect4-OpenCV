@@ -7,7 +7,7 @@ Servo servo02;
 Servo servo03;
 Servo servo04;
 
-SoftwareSerial Bluetooth(0, 1); // Arduino(RX, TX) - HC-05 Bluetooth (TX, RX)
+SoftwareSerial Bluetooth(0, 1);
 
 int servo1Pos, servo2Pos, servo3Pos, servo4Pos;
 int servo1PPos, servo2PPos, servo3PPos, servo4PPos;
