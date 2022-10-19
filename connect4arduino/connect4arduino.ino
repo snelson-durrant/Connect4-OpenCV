@@ -70,6 +70,11 @@ void loop() {
     Serial.print(dataIn);
 
     // pick up a piece
+    servo6Pos = 170;
+    moveServo(servo06, servo6Pos, servo6PPos);
+    servo5Pos = 50;
+    moveServo(servo05, servo5Pos, servo5PPos);
+    delay(20);
     servo1Pos = 1;
     moveServo(servo01, servo1Pos, servo1PPos);
     delay(50);
