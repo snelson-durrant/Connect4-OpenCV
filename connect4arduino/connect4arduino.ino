@@ -49,7 +49,7 @@ void setup() {
   // initial position
   servo1PPos = 90;
   servo01.write(servo1PPos);
-  servo2PPos = 70;
+  servo2PPos = 45;
   servo02.write(servo2PPos);
   servo3PPos = 90;
   servo03.write(servo3PPos);
@@ -57,7 +57,7 @@ void setup() {
   servo04.write(servo4PPos);
   servo5PPos = 150;
   servo05.write(servo5PPos);
-  servo6PPos = 80;
+  servo6PPos = 70;
   servo06.write(servo6PPos);
   
 }
@@ -72,61 +72,58 @@ void loop() {
     // pick up a piece
     servo6Pos = 170;
     moveServo(servo06, servo6Pos, servo6PPos);
-    servo5Pos = 50;
-    moveServo(servo05, servo5Pos, servo5PPos);
-    delay(20);
-    servo1Pos = 1;
-    moveServo(servo01, servo1Pos, servo1PPos);
-    delay(50);
-
-    // reset robot arm position
-    servo1Pos = 90;
-    moveServo(servo01, servo1Pos, servo1PPos);
     servo2Pos = 90;
     moveServo(servo02, servo2Pos, servo2PPos);
-    servo3Pos = 90;
-    moveServo(servo03, servo3Pos, servo3PPos);
-    servo4Pos = 120;
+    servo4Pos = 150;
     moveServo(servo04, servo4Pos, servo4PPos);
+    servo5Pos = 90;
+    moveServo(servo05, servo5Pos, servo5PPos);
+    delay(1500);
+    servo1Pos = 1;
+    moveServo(servo01, servo1Pos, servo1PPos);
+
+    // reset robot arm position
     servo5Pos = 150;
     moveServo(servo05, servo5Pos, servo5PPos);
+    servo4Pos = 120;
+    moveServo(servo04, servo4Pos, servo4PPos);
+    servo2Pos = 45;
+    moveServo(servo02, servo2Pos, servo2PPos);
     servo6Pos = 70;
     moveServo(servo06, servo6Pos, servo6PPos);
 
     // check the bluetooth data for column selection
     if (dataIn == "0") {
-  
+
+      servo3Pos = 160;
+      moveServo(servo03, servo3Pos, servo3PPos);
+      servo4Pos = 95;
+      moveServo(servo04, servo4Pos, servo4PPos);
+      servo5Pos = 75;
+      moveServo(servo05, servo5Pos, servo5PPos);
+      delay(50);
       servo1Pos = 90;
       moveServo(servo01, servo1Pos, servo1PPos);
-      servo2Pos = 90;
-      moveServo(servo02, servo2Pos, servo2PPos);
-      servo3Pos = 90;
-      moveServo(servo03, servo3Pos, servo3PPos);
-      servo4Pos = 120;
-      moveServo(servo04, servo4Pos, servo4PPos);
-      servo5Pos = 150;
-      moveServo(servo05, servo5Pos, servo5PPos);
-      servo6Pos = 70;
-      moveServo(servo06, servo6Pos, servo6PPos);
   
     } else if (dataIn == "1") {
   
+      servo3Pos = 135;
+      moveServo(servo03, servo3Pos, servo3PPos);
+      servo4Pos = 95;
+      moveServo(servo04, servo4Pos, servo4PPos);
+      servo5Pos = 82;
+      moveServo(servo05, servo5Pos, servo5PPos);
+      delay(50);
       servo1Pos = 90;
       moveServo(servo01, servo1Pos, servo1PPos);
-      servo2Pos = 90;
-      moveServo(servo02, servo2Pos, servo2PPos);
-      servo3Pos = 90;
-      moveServo(servo03, servo3Pos, servo3PPos);
-      servo4Pos = 120;
-      moveServo(servo04, servo4Pos, servo4PPos);
-      servo5Pos = 150;
-      moveServo(servo05, servo5Pos, servo5PPos);
-      servo6Pos = 80;
-      moveServo(servo06, servo6Pos, servo6PPos);
-  
+      
     } else if (dataIn == "2") {
-  
-      servo5Pos = 120;
+
+      servo3Pos = 115;
+      moveServo(servo03, servo3Pos, servo3PPos);
+      servo4Pos = 97;
+      moveServo(servo04, servo4Pos, servo4PPos);
+      servo5Pos = 85;
       moveServo(servo05, servo5Pos, servo5PPos);
       delay(50);
       servo1Pos = 90;
@@ -134,79 +131,65 @@ void loop() {
   
     } else if (dataIn == "3") {
   
+      servo4Pos = 98;
+      moveServo(servo04, servo4Pos, servo4PPos);
+      servo5Pos = 88;
+      moveServo(servo05, servo5Pos, servo5PPos);
+      delay(50);
       servo1Pos = 90;
       moveServo(servo01, servo1Pos, servo1PPos);
-      servo2Pos = 90;
-      moveServo(servo02, servo2Pos, servo2PPos);
-      servo3Pos = 90;
-      moveServo(servo03, servo3Pos, servo3PPos);
-      servo4Pos = 120;
-      moveServo(servo04, servo4Pos, servo4PPos);
-      servo5Pos = 150;
-      moveServo(servo05, servo5Pos, servo5PPos);
-      servo6Pos = 80;
-      moveServo(servo06, servo6Pos, servo6PPos);
   
     } else if (dataIn == "4") {
   
+      servo3Pos = 68;
+      moveServo(servo03, servo3Pos, servo3PPos);
+      servo4Pos = 97;
+      moveServo(servo04, servo4Pos, servo4PPos);
+      servo5Pos = 82;
+      moveServo(servo05, servo5Pos, servo5PPos);
+      delay(50);
       servo1Pos = 90;
       moveServo(servo01, servo1Pos, servo1PPos);
-      servo2Pos = 90;
-      moveServo(servo02, servo2Pos, servo2PPos);
-      servo3Pos = 90;
-      moveServo(servo03, servo3Pos, servo3PPos);
-      servo4Pos = 120;
-      moveServo(servo04, servo4Pos, servo4PPos);
-      servo5Pos = 150;
-      moveServo(servo05, servo5Pos, servo5PPos);
-      servo6Pos = 80;
-      moveServo(servo06, servo6Pos, servo6PPos);
 
     } else if (dataIn == "5") {
   
+      servo3Pos = 40;
+      moveServo(servo03, servo3Pos, servo3PPos);
+      servo4Pos = 95;
+      moveServo(servo04, servo4Pos, servo4PPos);
+      servo5Pos = 75;
+      moveServo(servo05, servo5Pos, servo5PPos);
+      delay(50);
       servo1Pos = 90;
       moveServo(servo01, servo1Pos, servo1PPos);
-      servo2Pos = 90;
-      moveServo(servo02, servo2Pos, servo2PPos);
-      servo3Pos = 90;
-      moveServo(servo03, servo3Pos, servo3PPos);
-      servo4Pos = 120;
-      moveServo(servo04, servo4Pos, servo4PPos);
-      servo5Pos = 150;
-      moveServo(servo05, servo5Pos, servo5PPos);
-      servo6Pos = 80;
-      moveServo(servo06, servo6Pos, servo6PPos);
   
     } else if (dataIn == "6") {
   
+      servo3Pos = 10;
+      moveServo(servo03, servo3Pos, servo3PPos);
+      servo4Pos = 105;
+      moveServo(servo04, servo4Pos, servo4PPos);
+      servo5Pos = 68;
+      moveServo(servo05, servo5Pos, servo5PPos);
+      delay(50);
       servo1Pos = 90;
       moveServo(servo01, servo1Pos, servo1PPos);
-      servo2Pos = 90;
-      moveServo(servo02, servo2Pos, servo2PPos);
-      servo3Pos = 90;
-      moveServo(servo03, servo3Pos, servo3PPos);
-      servo4Pos = 120;
-      moveServo(servo04, servo4Pos, servo4PPos);
-      servo5Pos = 150;
-      moveServo(servo05, servo5Pos, servo5PPos);
-      servo6Pos = 80;
-      moveServo(servo06, servo6Pos, servo6PPos);
   
     }
 
     // reset robot arm position
-    servo1Pos = 90;
-    moveServo(servo01, servo1Pos, servo1PPos);
-    servo2Pos = 90;
-    moveServo(servo02, servo2Pos, servo2PPos);
-    servo3Pos = 90;
-    moveServo(servo03, servo3Pos, servo3PPos);
-    servo4Pos = 120;
-    moveServo(servo04, servo4Pos, servo4PPos);
-    servo5Pos = 150;
-    moveServo(servo05, servo5Pos, servo5PPos);
     servo6Pos = 70;
     moveServo(servo06, servo6Pos, servo6PPos);
+    servo5Pos = 150;
+    moveServo(servo05, servo5Pos, servo5PPos);
+    servo2Pos = 90;
+    moveServo(servo02, servo2Pos, servo2PPos);
+    servo4Pos = 120;
+    moveServo(servo04, servo4Pos, servo4PPos);
+    servo3Pos = 90;
+    moveServo(servo03, servo3Pos, servo3PPos);
+    servo1Pos = 90;
+    moveServo(servo01, servo1Pos, servo1PPos);
     
   }
 }
