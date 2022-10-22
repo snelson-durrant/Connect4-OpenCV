@@ -7,7 +7,7 @@ CAMERA_ID = 1
 
 # get yellow mask
 def yellow_mask(board):
-    lower = np.array([20, 50, 100]) # 50
+    lower = np.array([20, 75, 100]) # adjust middle value when picking up whitish
     upper = np.array([30, 255, 255])
     return cv.inRange(board, lower, upper)
 

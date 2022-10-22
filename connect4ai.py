@@ -459,7 +459,7 @@ def score_columns(board, piece):
             if board[r][c] == piece and c == validLocations[0]:
                 score = score + 30
             # if in surrounding two columns
-            elif board[r][c] == piece and (validLocations[1] or c == validLocations[2]):
+            elif board[r][c] == piece and (c == validLocations[1] or c == validLocations[2]):
                 score = score + 10
     return score
 
@@ -474,9 +474,15 @@ def get_score(board, depth):
     else:
         score = 0
         for three in three_in_a_row(board, PLAYER_PIECE):
-            score = score - 900
+            if three[0] % 2 == 1:
+                score = score - 1200
+            else:
+                score = score - 900
         for three in three_in_a_row(board, AI_PIECE):
-            score = score + 900
+            if three[0] % 2 == 0:
+                score = score + 1200
+            else:
+                score = score + 900
         for two in two_in_a_row(board, PLAYER_PIECE):
             score = score - 300
         for two in two_in_a_row(board, AI_PIECE):
