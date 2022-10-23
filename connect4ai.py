@@ -459,8 +459,9 @@ def score_columns(board, piece):
             if board[r][c] == piece and c == validLocations[0]:
                 score = score + 30
             # if in surrounding two columns
-            elif board[r][c] == piece and (c == validLocations[1] or c == validLocations[2]):
-                score = score + 10
+            elif len(validLocations) >= 3:
+                if board[r][c] == piece and (c == validLocations[1] or c == validLocations[2]):
+                    score = score + 10
     return score
 
 

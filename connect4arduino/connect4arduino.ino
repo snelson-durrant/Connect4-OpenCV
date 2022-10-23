@@ -70,13 +70,13 @@ void loop() {
     Serial.print(dataIn);
 
     // pick up a piece
-    servo6Pos = 170;
+    servo6Pos = 142;
     moveServo(servo06, servo6Pos, servo6PPos);
-    servo2Pos = 90;
+    servo2Pos = 130;
     moveServo(servo02, servo2Pos, servo2PPos);
-    servo4Pos = 150;
+    servo4Pos = 165;
     moveServo(servo04, servo4Pos, servo4PPos);
-    servo5Pos = 90;
+    servo5Pos = 65;
     moveServo(servo05, servo5Pos, servo5PPos);
     delay(1500);
     servo1Pos = 1;
@@ -97,7 +97,7 @@ void loop() {
 
       servo3Pos = 160;
       moveServo(servo03, servo3Pos, servo3PPos);
-      servo4Pos = 95;
+      servo4Pos = 89;
       moveServo(servo04, servo4Pos, servo4PPos);
       servo5Pos = 75;
       moveServo(servo05, servo5Pos, servo5PPos);
@@ -109,7 +109,7 @@ void loop() {
   
       servo3Pos = 135;
       moveServo(servo03, servo3Pos, servo3PPos);
-      servo4Pos = 95;
+      servo4Pos = 93;
       moveServo(servo04, servo4Pos, servo4PPos);
       servo5Pos = 82;
       moveServo(servo05, servo5Pos, servo5PPos);
@@ -121,7 +121,7 @@ void loop() {
 
       servo3Pos = 115;
       moveServo(servo03, servo3Pos, servo3PPos);
-      servo4Pos = 97;
+      servo4Pos = 94;
       moveServo(servo04, servo4Pos, servo4PPos);
       servo5Pos = 85;
       moveServo(servo05, servo5Pos, servo5PPos);
@@ -131,7 +131,7 @@ void loop() {
   
     } else if (dataIn == "3") {
   
-      servo4Pos = 98;
+      servo4Pos = 95;
       moveServo(servo04, servo4Pos, servo4PPos);
       servo5Pos = 88;
       moveServo(servo05, servo5Pos, servo5PPos);
@@ -143,7 +143,7 @@ void loop() {
   
       servo3Pos = 68;
       moveServo(servo03, servo3Pos, servo3PPos);
-      servo4Pos = 97;
+      servo4Pos = 95;
       moveServo(servo04, servo4Pos, servo4PPos);
       servo5Pos = 82;
       moveServo(servo05, servo5Pos, servo5PPos);
@@ -155,7 +155,7 @@ void loop() {
   
       servo3Pos = 40;
       moveServo(servo03, servo3Pos, servo3PPos);
-      servo4Pos = 95;
+      servo4Pos = 93;
       moveServo(servo04, servo4Pos, servo4PPos);
       servo5Pos = 75;
       moveServo(servo05, servo5Pos, servo5PPos);
@@ -165,11 +165,11 @@ void loop() {
   
     } else if (dataIn == "6") {
   
-      servo3Pos = 10;
+      servo3Pos = 5;
       moveServo(servo03, servo3Pos, servo3PPos);
-      servo4Pos = 105;
+      servo4Pos = 100;
       moveServo(servo04, servo4Pos, servo4PPos);
-      servo5Pos = 68;
+      servo5Pos = 64;
       moveServo(servo05, servo5Pos, servo5PPos);
       delay(50);
       servo1Pos = 90;
