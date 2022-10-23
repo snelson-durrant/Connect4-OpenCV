@@ -41,6 +41,7 @@ while True:
         break
 
     # send move to robot
+    s.send(str(7).encode())
     robot_move, move_score = get_best_move(game_board, MINIMAX_DEPTH)
     print_board(game_board)
     print("move selection: " + str(robot_move))

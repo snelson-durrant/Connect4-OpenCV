@@ -69,29 +69,6 @@ void loop() {
     dataIn = Serial.readString();
     Serial.print(dataIn);
 
-    // pick up a piece
-    servo6Pos = 142;
-    moveServo(servo06, servo6Pos, servo6PPos);
-    servo2Pos = 130;
-    moveServo(servo02, servo2Pos, servo2PPos);
-    servo4Pos = 165;
-    moveServo(servo04, servo4Pos, servo4PPos);
-    servo5Pos = 65;
-    moveServo(servo05, servo5Pos, servo5PPos);
-    delay(1500);
-    servo1Pos = 1;
-    moveServo(servo01, servo1Pos, servo1PPos);
-
-    // reset robot arm position
-    servo5Pos = 150;
-    moveServo(servo05, servo5Pos, servo5PPos);
-    servo4Pos = 120;
-    moveServo(servo04, servo4Pos, servo4PPos);
-    servo2Pos = 45;
-    moveServo(servo02, servo2Pos, servo2PPos);
-    servo6Pos = 70;
-    moveServo(servo06, servo6Pos, servo6PPos);
-
     // check the bluetooth data for column selection
     if (dataIn == "0") {
 
@@ -175,21 +152,44 @@ void loop() {
       servo1Pos = 90;
       moveServo(servo01, servo1Pos, servo1PPos);
   
+    } else if (dataIn == "7") {
+
+      // pick up a piece
+      servo6Pos = 142;
+      moveServo(servo06, servo6Pos, servo6PPos);
+      servo2Pos = 130;
+      moveServo(servo02, servo2Pos, servo2PPos);
+      servo4Pos = 165;
+      moveServo(servo04, servo4Pos, servo4PPos);
+      servo5Pos = 65;
+      moveServo(servo05, servo5Pos, servo5PPos);
+      delay(500);
+      servo1Pos = 1;
+      moveServo(servo01, servo1Pos, servo1PPos);
+
+      // reset robot arm position
+      servo5Pos = 150;
+      moveServo(servo05, servo5Pos, servo5PPos);
+      servo4Pos = 120;
+      moveServo(servo04, servo4Pos, servo4PPos);
+      servo2Pos = 45;
+      moveServo(servo02, servo2Pos, servo2PPos);
+      servo6Pos = 70;
+      moveServo(servo06, servo6Pos, servo6PPos);
+      
     }
 
     // reset robot arm position
-    servo6Pos = 70;
-    moveServo(servo06, servo6Pos, servo6PPos);
     servo5Pos = 150;
     moveServo(servo05, servo5Pos, servo5PPos);
-    servo2Pos = 90;
+    servo2Pos = 45;
     moveServo(servo02, servo2Pos, servo2PPos);
-    servo4Pos = 120;
-    moveServo(servo04, servo4Pos, servo4PPos);
     servo3Pos = 90;
     moveServo(servo03, servo3Pos, servo3PPos);
-    servo1Pos = 90;
-    moveServo(servo01, servo1Pos, servo1PPos);
+    servo4Pos = 120;
+    moveServo(servo04, servo4Pos, servo4PPos);
+    servo6Pos = 70;
+    moveServo(servo06, servo6Pos, servo6PPos);
     
   }
 }
