@@ -3,10 +3,10 @@ import numpy as np
 ROW_COUNT = 6
 COLUMN_COUNT = 7
 
-PLAYER_PIECE = 1 # red
-AI_PIECE = 2 # yellow
+PLAYER_PIECE = 1  # red
+AI_PIECE = 2  # yellow
 
-MINIMAX_DEPTH = 6
+MINIMAX_DEPTH = 7
 
 
 def sort_from_middle(list, reverse=False):
@@ -43,8 +43,9 @@ def print_board(board):
 
 def four_in_a_row(board, piece):
 
-    # check horizontals for win
     for c in range(COLUMN_COUNT - 3):
+
+        # check horizontals for win
         for r in range(ROW_COUNT):
             if (
                 board[r][c] == piece
@@ -54,8 +55,29 @@ def four_in_a_row(board, piece):
             ):
                 return True
 
-    # check verticals for win
+        for r in range(ROW_COUNT - 3):
+
+            # check positive diagonals for win
+            if (
+                board[r][c] == piece
+                and board[r + 1][c + 1] == piece
+                and board[r + 2][c + 2] == piece
+                and board[r + 3][c + 3] == piece
+            ):
+                return True
+
+            # check negative diagonals for win
+            if (
+                board[r + 3][c] == piece
+                and board[r + 2][c + 1] == piece
+                and board[r + 1][c + 2] == piece
+                and board[r][c + 3] == piece
+            ):
+                return True
+
     for c in range(COLUMN_COUNT):
+
+        # check verticals for win
         for r in range(ROW_COUNT - 3):
             if (
                 board[r][c] == piece
@@ -65,403 +87,518 @@ def four_in_a_row(board, piece):
             ):
                 return True
 
-    # check positive diagonals for win
+
+def in_a_row(board, piece):
+    even_threes = 0
+    odd_threes = 0
+    twos = 0
+    ones = 0
+
     for c in range(COLUMN_COUNT - 3):
-        for r in range(ROW_COUNT - 3):
-            if (
-                board[r][c] == piece
-                and board[r + 1][c + 1] == piece
-                and board[r + 2][c + 2] == piece
-                and board[r + 3][c + 3] == piece
-            ):
-                return True
 
-    # check negative diagonals for win
-    for c in range(COLUMN_COUNT - 3):
-        for r in range(3, ROW_COUNT):
-            if (
-                board[r][c] == piece
-                and board[r - 1][c + 1] == piece
-                and board[r - 2][c + 2] == piece
-                and board[r - 3][c + 3] == piece
-            ):
-                return True
-
-
-def three_in_a_row(board, piece):
-    locations = []
-
-    # check horizontals for pattern _XXX
-    for c in range(COLUMN_COUNT - 3):
         for r in range(ROW_COUNT):
+
+            # check horizontals for pattern _XXX
             if (
                 board[r][c] == 0
                 and board[r][c + 1] == piece
                 and board[r][c + 2] == piece
                 and board[r][c + 3] == piece
             ):
-                locations.append([r, c])
+                if r % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
 
-    # check verticals for pattern _XXX
-    for c in range(COLUMN_COUNT):
-        for r in range(ROW_COUNT - 3):
-            if (
-                board[r][c] == 0
-                and board[r + 1][c] == piece
-                and board[r + 2][c] == piece
-                and board[r + 3][c] == piece
-            ):
-                locations.append([r, c])
-
-    # check positive diagonals for pattern _XXX
-    for c in range(COLUMN_COUNT - 3):
-        for r in range(ROW_COUNT - 3):
-            if (
-                board[r][c] == 0
-                and board[r + 1][c + 1] == piece
-                and board[r + 2][c + 2] == piece
-                and board[r + 3][c + 3] == piece
-            ):
-                locations.append([r, c])
-
-    # check negative diagonals for pattern _XXX
-    for c in range(COLUMN_COUNT - 3):
-        for r in range(3, ROW_COUNT):
-            if (
-                board[r][c] == 0
-                and board[r - 1][c + 1] == piece
-                and board[r - 2][c + 2] == piece
-                and board[r - 3][c + 3] == piece
-            ):
-                locations.append([r, c])
-
-    # check horizontals for pattern X_XX
-    for c in range(COLUMN_COUNT - 3):
-        for r in range(ROW_COUNT):
-            if (
+            # check horizontals for pattern X_XX
+            elif (
                 board[r][c] == piece
                 and board[r][c + 1] == 0
                 and board[r][c + 2] == piece
                 and board[r][c + 3] == piece
             ):
-                locations.append([r, c + 1])
+                if r % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
 
-    # check verticals for pattern X_XX
-    for c in range(COLUMN_COUNT):
-        for r in range(ROW_COUNT - 3):
-            if (
-                board[r][c] == piece
-                and board[r + 1][c] == 0
-                and board[r + 2][c] == piece
-                and board[r + 3][c] == piece
-            ):
-                locations.append([r + 1, c])
-
-    # check positive diagonals for pattern X_XX
-    for c in range(COLUMN_COUNT - 3):
-        for r in range(ROW_COUNT - 3):
-            if (
-                board[r][c] == piece
-                and board[r + 1][c + 1] == 0
-                and board[r + 2][c + 2] == piece
-                and board[r + 3][c + 3] == piece
-            ):
-                locations.append([r + 1, c + 1])
-
-    # check negative diagonals for pattern X_XX
-    for c in range(COLUMN_COUNT - 3):
-        for r in range(3, ROW_COUNT):
-            if (
-                board[r][c] == piece
-                and board[r - 1][c + 1] == 0
-                and board[r - 2][c + 2] == piece
-                and board[r - 3][c + 3] == piece
-            ):
-                locations.append([r - 1, c + 1])
-
-    # check horizontals for pattern XX_X
-    for c in range(COLUMN_COUNT - 3):
-        for r in range(ROW_COUNT):
-            if (
+            # check horizontals for pattern XX_X
+            elif (
                 board[r][c] == piece
                 and board[r][c + 1] == piece
                 and board[r][c + 2] == 0
                 and board[r][c + 3] == piece
             ):
-                locations.append([r, c + 2])
+                if r % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
 
-    # check verticals for pattern XX_X
-    for c in range(COLUMN_COUNT):
-        for r in range(ROW_COUNT - 3):
-            if (
-                board[r][c] == piece
-                and board[r + 1][c] == piece
-                and board[r + 2][c] == 0
-                and board[r + 3][c] == piece
-            ):
-                locations.append([r + 2, c])
-
-    # check positive diagonals for pattern XX_X
-    for c in range(COLUMN_COUNT - 3):
-        for r in range(ROW_COUNT - 3):
-            if (
-                board[r][c] == piece
-                and board[r + 1][c + 1] == piece
-                and board[r + 2][c + 2] == 0
-                and board[r + 3][c + 3] == piece
-            ):
-                locations.append([r + 2, c + 2])
-
-    # check negative diagonals for pattern XX_X
-    for c in range(COLUMN_COUNT - 3):
-        for r in range(3, ROW_COUNT):
-            if (
-                board[r][c] == piece
-                and board[r - 1][c + 1] == piece
-                and board[r - 2][c + 2] == 0
-                and board[r - 3][c + 3] == piece
-            ):
-                locations.append([r - 2, c + 2])
-
-    # check horizontals for pattern XXX_
-    for c in range(COLUMN_COUNT - 3):
-        for r in range(ROW_COUNT):
-            if (
+            # check horizontals for pattern XXX_
+            elif (
                 board[r][c] == piece
                 and board[r][c + 1] == piece
                 and board[r][c + 2] == piece
                 and board[r][c + 3] == 0
             ):
-                locations.append([r, c + 3])
+                if r % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
 
-    # check verticals for pattern XXX_
-    for c in range(COLUMN_COUNT):
-        for r in range(ROW_COUNT - 3):
-            if (
-                board[r][c] == piece
-                and board[r + 1][c] == piece
-                and board[r + 2][c] == piece
-                and board[r + 3][c] == 0
+            # check horizontals for pattern __XX
+            elif (
+                board[r][c] == 0
+                and board[r][c + 1] == 0
+                and board[r][c + 2] == piece
+                and board[r][c + 3] == piece
             ):
-                locations.append([r + 3, c])
+                twos = twos + 1
 
-    # check positive diagonals for pattern XXX_
-    for c in range(COLUMN_COUNT - 3):
+            # check horizontals for pattern X__X
+            elif (
+                board[r][c] == 0
+                and board[r][c + 1] == piece
+                and board[r][c + 2] == piece
+                and board[r][c + 3] == 0
+            ):
+                twos = twos + 1
+
+            # check horizontals for pattern XX__
+            elif (
+                board[r][c] == piece
+                and board[r][c + 1] == piece
+                and board[r][c + 2] == 0
+                and board[r][c + 3] == 0
+            ):
+                twos = twos + 1
+
+            # check horizontals for pattern _XX_
+            elif (
+                board[r][c] == 0
+                and board[r][c + 1] == piece
+                and board[r][c + 2] == piece
+                and board[r][c + 3] == 0
+            ):
+                twos = twos + 1
+
+            # check horizontals for pattern ___X
+            elif (
+                board[r][c] == 0
+                and board[r][c + 1] == 0
+                and board[r][c + 2] == 0
+                and board[r][c + 3] == piece
+            ):
+                ones = ones + 1
+
+            # check horizontals for pattern X___
+            elif (
+                board[r][c] == piece
+                and board[r][c + 1] == 0
+                and board[r][c + 2] == 0
+                and board[r][c + 3] == 0
+            ):
+                ones = ones + 1
+
+            # check horizontals for pattern _X__
+            elif (
+                board[r][c] == 0
+                and board[r][c + 1] == piece
+                and board[r][c + 2] == 0
+                and board[r][c + 3] == 0
+            ):
+                ones = ones + 1
+
+            # check horizontals for pattern __X_
+            elif (
+                board[r][c] == 0
+                and board[r][c + 1] == 0
+                and board[r][c + 2] == piece
+                and board[r][c + 3] == 0
+            ):
+                ones = ones + 1
+
         for r in range(ROW_COUNT - 3):
+
+            # check positive diagonals for pattern _XXX
             if (
+                board[r][c] == 0
+                and board[r + 1][c + 1] == piece
+                and board[r + 2][c + 2] == piece
+                and board[r + 3][c + 3] == piece
+            ):
+                if r % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
+
+            # check positive diagonals for pattern X_XX
+            elif (
+                board[r][c] == piece
+                and board[r + 1][c + 1] == 0
+                and board[r + 2][c + 2] == piece
+                and board[r + 3][c + 3] == piece
+            ):
+                if (r + 1) % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
+
+            # check positive diagonals for pattern XX_X
+            elif (
+                board[r][c] == piece
+                and board[r + 1][c + 1] == piece
+                and board[r + 2][c + 2] == 0
+                and board[r + 3][c + 3] == piece
+            ):
+                if (r + 2) % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
+
+            # check positive diagonals for pattern XXX_
+            elif (
                 board[r][c] == piece
                 and board[r + 1][c + 1] == piece
                 and board[r + 2][c + 2] == piece
                 and board[r + 3][c + 3] == 0
             ):
-                locations.append([r + 3, c + 3])
+                if (r + 3) % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
 
-    # check negative diagonals for pattern XXX_
-    for c in range(COLUMN_COUNT - 3):
-        for r in range(3, ROW_COUNT):
-            if (
-                board[r][c] == piece
-                and board[r - 1][c + 1] == piece
-                and board[r - 2][c + 2] == piece
-                and board[r - 3][c + 3] == 0
-            ):
-                locations.append([r - 3, c + 3])
-
-    return locations
-
-
-def two_in_a_row(board, piece):
-    locations = []
-
-    # check horizontals for pattern _XX
-    for c in range(COLUMN_COUNT - 2):
-        for r in range(ROW_COUNT):
-            if (
+            # check positive diagonals for pattern __XX
+            elif (
                 board[r][c] == 0
-                and board[r][c + 1] == piece
-                and board[r][c + 2] == piece
-            ):
-                locations.append([r, c])
-
-    # check verticals for pattern _XX
-    for c in range(COLUMN_COUNT):
-        for r in range(ROW_COUNT - 2):
-            if (
-                board[r][c] == 0
-                and board[r + 1][c] == piece
-                and board[r + 2][c] == piece
-            ):
-                locations.append([r, c])
-
-    # check positive diagonals for pattern _XX
-    for c in range(COLUMN_COUNT - 2):
-        for r in range(ROW_COUNT - 2):
-            if (
-                board[r][c] == 0
-                and board[r + 1][c + 1] == piece
-                and board[r + 2][c + 2] == piece
-            ):
-                locations.append([r, c])
-
-    # check negative diagonals for pattern _XX
-    for c in range(COLUMN_COUNT - 2):
-        for r in range(2, ROW_COUNT):
-            if (
-                board[r][c] == 0
-                and board[r - 1][c + 1] == piece
-                and board[r - 2][c + 2] == piece
-            ):
-                locations.append([r, c])
-
-    # check horizontals for pattern X_X
-    for c in range(COLUMN_COUNT - 2):
-        for r in range(ROW_COUNT):
-            if (
-                board[r][c] == piece
-                and board[r][c + 1] == 0
-                and board[r][c + 2] == piece
-            ):
-                locations.append([r, c + 1])
-
-    # check verticals for pattern X_X
-    for c in range(COLUMN_COUNT):
-        for r in range(ROW_COUNT - 2):
-            if (
-                board[r][c] == piece
-                and board[r + 1][c] == 0
-                and board[r + 2][c] == piece
-            ):
-                locations.append([r + 1, c])
-
-    # check positive diagonals for pattern X_X
-    for c in range(COLUMN_COUNT - 2):
-        for r in range(ROW_COUNT - 2):
-            if (
-                board[r][c] == piece
                 and board[r + 1][c + 1] == 0
                 and board[r + 2][c + 2] == piece
+                and board[r + 3][c + 3] == piece
             ):
-                locations.append([r + 1, c + 1])
+                twos = twos + 1
 
-    # check negative diagonals for pattern X_X
-    for c in range(COLUMN_COUNT - 2):
-        for r in range(2, ROW_COUNT):
-            if (
+            # check positive diagonals for pattern X__X
+            elif (
                 board[r][c] == piece
-                and board[r - 1][c + 1] == 0
-                and board[r - 2][c + 2] == piece
+                and board[r + 1][c + 1] == 0
+                and board[r + 2][c + 2] == 0
+                and board[r + 3][c + 3] == piece
             ):
-                locations.append([r - 1, c + 1])
+                twos = twos + 1
 
-    # check horizontals for pattern XX_
-    for c in range(COLUMN_COUNT - 2):
-        for r in range(ROW_COUNT):
-            if (
-                board[r][c] == piece
-                and board[r][c + 1] == piece
-                and board[r][c + 2] == 0
-            ):
-                locations.append([r, c + 2])
-
-    # check verticals for pattern XX_
-    for c in range(COLUMN_COUNT):
-        for r in range(ROW_COUNT - 2):
-            if (
-                board[r][c] == piece
-                and board[r + 1][c] == piece
-                and board[r + 2][c] == 0
-            ):
-                locations.append([r + 2, c])
-
-    # check positive diagonals for pattern XX_
-    for c in range(COLUMN_COUNT - 2):
-        for r in range(ROW_COUNT - 2):
-            if (
+            # check positive diagonals for pattern XX__
+            elif (
                 board[r][c] == piece
                 and board[r + 1][c + 1] == piece
                 and board[r + 2][c + 2] == 0
+                and board[r + 3][c + 3] == 0
             ):
-                locations.append([r + 2, c + 2])
+                twos = twos + 1
 
-    # check negative diagonals for pattern XX_
-    for c in range(COLUMN_COUNT - 2):
-        for r in range(2, ROW_COUNT):
-            if (
+            # check positive diagonals for pattern _XX_
+            elif (
+                board[r][c] == 0
+                and board[r + 1][c + 1] == piece
+                and board[r + 2][c + 2] == piece
+                and board[r + 3][c + 3] == 0
+            ):
+                twos = twos + 1
+
+            # check positive diagonals for pattern ___X
+            elif (
+                board[r][c] == 0
+                and board[r + 1][c + 1] == 0
+                and board[r + 2][c + 2] == 0
+                and board[r + 3][c + 3] == piece
+            ):
+                ones = ones + 1
+
+            # check positive diagonals for pattern X___
+            elif (
                 board[r][c] == piece
-                and board[r - 1][c + 1] == piece
-                and board[r - 2][c + 2] == 0
+                and board[r + 1][c + 1] == 0
+                and board[r + 2][c + 2] == 0
+                and board[r + 3][c + 3] == 0
             ):
-                locations.append([r - 2, c + 2])
+                ones = ones + 1
 
-    return locations
+            # check positive diagonals for pattern _X__
+            elif (
+                board[r][c] == 0
+                and board[r + 1][c + 1] == piece
+                and board[r + 2][c + 2] == 0
+                and board[r + 3][c + 3] == 0
+            ):
+                ones = ones + 1
 
+            # check positive diagonals for pattern __X_
+            elif (
+                board[r][c] == 0
+                and board[r + 1][c + 1] == 0
+                and board[r + 2][c + 2] == piece
+                and board[r + 3][c + 3] == 0
+            ):
+                ones = ones + 1
 
-def one_in_a_row(board, piece):
-    locations = []
+            # check negative diagonals for pattern _XXX
+            if (
+                board[r + 3][c] == 0
+                and board[r + 2][c + 1] == piece
+                and board[r + 1][c + 2] == piece
+                and board[r][c + 3] == piece
+            ):
+                if (r + 3) % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
 
-    # check horizontals for pattern _X
-    for c in range(COLUMN_COUNT - 1):
-        for r in range(ROW_COUNT):
-            if board[r][c] == 0 and board[r][c + 1] == piece:
-                locations.append([r, c])
+            # check negative diagonals for pattern X_XX
+            elif (
+                board[r + 3][c] == piece
+                and board[r + 2][c + 1] == 0
+                and board[r + 1][c + 2] == piece
+                and board[r][c + 3] == piece
+            ):
+                if (r + 2) % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
 
-    # check verticals for pattern _X
+            # check negative diagonals for pattern XX_X
+            elif (
+                board[r + 3][c] == piece
+                and board[r + 2][c + 1] == piece
+                and board[r + 1][c + 2] == 0
+                and board[r][c + 3] == piece
+            ):
+                if (r + 1) % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
+
+            # check negative diagonals for pattern XXX_
+            elif (
+                board[r + 3][c] == piece
+                and board[r + 2][c + 1] == piece
+                and board[r + 1][c + 2] == piece
+                and board[r][c + 3] == 0
+            ):
+                if r % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
+
+            # check negative diagonals for pattern __XX
+            elif (
+                board[r + 3][c] == 0
+                and board[r + 2][c + 1] == 0
+                and board[r + 1][c + 2] == piece
+                and board[r][c + 3] == piece
+            ):
+                twos = twos + 1
+
+            # check negative diagonals for pattern X__X
+            elif (
+                board[r + 3][c] == piece
+                and board[r + 2][c + 1] == 0
+                and board[r + 1][c + 2] == 0
+                and board[r][c + 3] == piece
+            ):
+                twos = twos + 1
+
+            # check negative diagonals for pattern XX__
+            elif (
+                board[r + 3][c] == piece
+                and board[r + 2][c + 1] == piece
+                and board[r + 1][c + 2] == 0
+                and board[r][c + 3] == 0
+            ):
+                twos = twos + 1
+
+            # check negative diagonals for pattern _XX_
+            elif (
+                board[r + 3][c] == 0
+                and board[r + 2][c + 1] == piece
+                and board[r + 1][c + 2] == piece
+                and board[r + 0][c + 3] == 0
+            ):
+                twos = twos + 1
+
+            # check negative diagonals for pattern ___X
+            elif (
+                board[r + 3][c] == 0
+                and board[r + 2][c + 1] == 0
+                and board[r + 1][c + 2] == 0
+                and board[r][c + 3] == piece
+            ):
+                ones = ones + 1
+
+            # check negative diagonals for pattern X___
+            elif (
+                board[r + 3][c] == piece
+                and board[r + 2][c + 1] == 0
+                and board[r + 1][c + 2] == 0
+                and board[r][c + 3] == 0
+            ):
+                ones = ones + 1
+
+            # check negative diagonals for pattern _X__
+            elif (
+                board[r + 3][c] == 0
+                and board[r + 2][c + 1] == piece
+                and board[r + 1][c + 2] == 0
+                and board[r][c + 3] == 0
+            ):
+                ones = ones + 1
+
+            # check negative diagonals for pattern __X_
+            elif (
+                board[r + 3][c] == 0
+                and board[r + 2][c + 1] == 0
+                and board[r + 1][c + 2] == piece
+                and board[r][c + 3] == 0
+            ):
+                ones = ones + 1
+
     for c in range(COLUMN_COUNT):
-        for r in range(ROW_COUNT - 1):
-            if board[r][c] == 0 and board[r + 1][c] == piece:
-                locations.append([r, c])
 
-    # check positive diagonals for pattern _X
-    for c in range(COLUMN_COUNT - 1):
-        for r in range(ROW_COUNT - 1):
-            if board[r][c] == 0 and board[r + 1][c + 1] == piece:
-                locations.append([r, c])
+        for r in range(ROW_COUNT - 3):
 
-    # check negative diagonals for pattern _X
-    for c in range(COLUMN_COUNT - 1):
-        for r in range(1, ROW_COUNT):
-            if board[r][c] == 0 and board[r - 1][c + 1] == piece:
-                locations.append([r, c])
+            # check verticals for pattern _XXX
+            if (
+                board[r][c] == 0
+                and board[r + 1][c] == piece
+                and board[r + 2][c] == piece
+                and board[r + 3][c] == piece
+            ):
+                if r % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
 
-    # check horizontals for pattern X_
-    for c in range(COLUMN_COUNT - 1):
-        for r in range(ROW_COUNT):
-            if board[r][c] == piece and board[r][c + 1] == 0:
-                locations.append([r, c + 1])
+            # check verticals for pattern X_XX
+            elif (
+                board[r][c] == piece
+                and board[r + 1][c] == 0
+                and board[r + 2][c] == piece
+                and board[r + 3][c] == piece
+            ):
+                if (r + 1) % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
 
-    # check verticals for pattern X_
-    for c in range(COLUMN_COUNT):
-        for r in range(ROW_COUNT - 1):
-            if board[r][c] == piece and board[r + 1][c] == 0:
-                locations.append([r + 1, c])
+            # check verticals for pattern XX_X
+            elif (
+                board[r][c] == piece
+                and board[r + 1][c] == piece
+                and board[r + 2][c] == 0
+                and board[r + 3][c] == piece
+            ):
+                if (r + 2) % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
 
-    # check positive diagonals for pattern X_
-    for c in range(COLUMN_COUNT - 1):
-        for r in range(ROW_COUNT - 1):
-            if board[r][c] == piece and board[r + 1][c + 1] == 0:
-                locations.append([r + 1, c + 1])
+            # check verticals for pattern XXX_
+            elif (
+                board[r][c] == piece
+                and board[r + 1][c] == piece
+                and board[r + 2][c] == piece
+                and board[r + 3][c] == 0
+            ):
+                if (r + 3) % 2 == 0:
+                    even_threes = even_threes + 1
+                else:
+                    odd_threes = odd_threes + 1
 
-    # check negative diagonals for pattern X_
-    for c in range(COLUMN_COUNT - 1):
-        for r in range(1, ROW_COUNT):
-            if board[r][c] == piece and board[r - 1][c + 1] == 0:
-                locations.append([r - 1, c + 1])
+            # check verticals for pattern __XX
+            elif (
+                board[r][c] == 0
+                and board[r + 1][c] == 0
+                and board[r + 2][c] == piece
+                and board[r + 3][c] == piece
+            ):
+                twos = twos + 1
 
-    return locations
+            # check verticals for pattern X__X
+            elif (
+                board[r][c] == piece
+                and board[r + 1][c] == 0
+                and board[r + 2][c] == 0
+                and board[r + 3][c] == piece
+            ):
+                twos = twos + 1
+
+            # check verticals for pattern XX__
+            elif (
+                board[r][c] == piece
+                and board[r + 1][c] == piece
+                and board[r + 2][c] == 0
+                and board[r + 3][c] == 0
+            ):
+                twos = twos + 1
+
+            # check verticals for pattern _XX_
+            elif (
+                board[r][c] == 0
+                and board[r + 1][c] == piece
+                and board[r + 2][c] == piece
+                and board[r + 3][c] == 0
+            ):
+                twos = twos + 1
+
+            # check verticals for pattern ___X
+            elif (
+                board[r][c] == 0
+                and board[r + 1][c] == 0
+                and board[r + 2][c] == 0
+                and board[r + 3][c] == piece
+            ):
+                ones = ones + 1
+
+            # check verticals for pattern X___
+            elif (
+                board[r][c] == piece
+                and board[r + 1][c] == 0
+                and board[r + 2][c] == 0
+                and board[r + 3][c] == piece
+            ):
+                ones = ones + 1
+
+            # check verticals for pattern _X__
+            elif (
+                board[r][c] == piece
+                and board[r + 1][c] == piece
+                and board[r + 2][c] == 0
+                and board[r + 3][c] == 0
+            ):
+                ones = ones + 1
+
+            # check verticals for pattern __X_
+            elif (
+                board[r][c] == 0
+                and board[r + 1][c] == piece
+                and board[r + 2][c] == piece
+                and board[r + 3][c] == 0
+            ):
+                ones = ones + 1
+
+    return even_threes, odd_threes, twos, ones
 
 
 def score_columns(board, piece):
     score = 0
-    validLocations = get_valid_locations(board)
-    for c in range(COLUMN_COUNT):
-        for r in range(ROW_COUNT):
-            # if in middle column
-            if board[r][c] == piece and c == validLocations[0]:
-                score = score + 30
-            # if in surrounding two columns
-            elif len(validLocations) >= 3:
-                if board[r][c] == piece and (c == validLocations[1] or c == validLocations[2]):
-                    score = score + 10
+    for r in range(ROW_COUNT):
+        # if in middle column
+        middle = int((COLUMN_COUNT - 1) / 2)
+        if board[r][middle] == piece:
+            score = score + 200
+        # if in surrounding two columns
+        left = int(((COLUMN_COUNT - 1) / 2) - 1)
+        right = int(((COLUMN_COUNT - 1) / 2) + 1)
+        if board[r][left] == piece or board[r][right] == piece:
+            score = score + 50
     return score
 
 
@@ -474,24 +611,16 @@ def get_score(board, depth):
         return 1000000 - offset
     else:
         score = 0
-        for three in three_in_a_row(board, PLAYER_PIECE):
-            if three[0] % 2 == 1:
-                score = score - 1200
-            else:
-                score = score - 900
-        for three in three_in_a_row(board, AI_PIECE):
-            if three[0] % 2 == 0:
-                score = score + 1200
-            else:
-                score = score + 900
-        for two in two_in_a_row(board, PLAYER_PIECE):
-            score = score - 300
-        for two in two_in_a_row(board, AI_PIECE):
-            score = score + 300
-        for one in one_in_a_row(board, PLAYER_PIECE):
-            score = score - 20
-        for one in one_in_a_row(board, AI_PIECE):
-            score = score + 20
+        player_even_threes, player_odd_threes, player_twos, player_ones = in_a_row(board, PLAYER_PIECE)
+        ai_even_threes, ai_odd_threes, ai_twos, ai_ones = in_a_row(board, AI_PIECE)
+        score = score - 2400 * player_even_threes
+        score = score + 1800 * ai_even_threes
+        score = score - 1800 * player_odd_threes
+        score = score + 2400 * ai_odd_threes
+        score = score - 300 * player_twos
+        score = score + 300 * ai_twos
+        score = score - 20 * player_ones
+        score = score + 20 * ai_ones
         score = score - score_columns(board, PLAYER_PIECE)
         score = score + score_columns(board, AI_PIECE)
         return score

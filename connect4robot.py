@@ -61,4 +61,4 @@ while True:
 print("game over!")
 vid.release()
 cv.destroyAllWindows()
-# s.close()
+s.close()
