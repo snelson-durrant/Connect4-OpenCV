@@ -1,3 +1,5 @@
+https://youtu.be/lbCc1O47Izo
+
 This is code I wrote to enable an arduino-based robot arm to autonomously play a human opponent in Connect 4. There are four parts:
     (1) connect4ai.py - runs analysis on the board state and determines the robot's moves
     (2) connect4opencv.py - reads in a processable array from a video stream of the physical board
