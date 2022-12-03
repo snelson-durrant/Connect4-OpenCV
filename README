@@ -1,4 +1,4 @@
-https://youtu.be/lbCc1O47Izo
+<iframe width="560" height="315" src="https://www.youtube.com/embed/lbCc1O47Izo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 This is code I wrote to enable an arduino-based robot arm to autonomously play a human opponent in Connect 4. There are four parts:
     (1) connect4ai.py - runs analysis on the board state and determines the robot's moves
