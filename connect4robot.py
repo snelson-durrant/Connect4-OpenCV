@@ -1,4 +1,5 @@
 import socket
+import time
 from connect4ai import *
 from connect4opencv import *
 
@@ -46,10 +47,11 @@ while True:
     print_board(game_board)
     print("move selection: " + str(robot_move))
     print("move score: " + str(move_score))
+    time.sleep(2)
     s.send(str(robot_move).encode())
     print("SENT TO ROBOT!")
 
-    # check move_score for AI win
+    # check move_score for ai win
     if move_score == 999999:
         break
 
@@ -58,7 +60,9 @@ while True:
     diff = 2
 
 # finish
-print("game over!")
+print()
+print("GAME OVER!")
+time.sleep(2)
 vid.release()
 cv.destroyAllWindows()
 s.close()
