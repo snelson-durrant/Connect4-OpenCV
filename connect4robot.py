@@ -2,6 +2,7 @@ import socket
 import time
 from connect4ai import *
 from connect4opencv import *
+from playsound import playsound
 
 HC05_ADDRESS = "98:d3:41:f5:ca:2a"
 PORT = 1
@@ -11,6 +12,7 @@ game_board = np.zeros((ROW_COUNT, COLUMN_COUNT))
 prev_board = game_board
 board_valid = False
 diff = 1
+champion = False
 
 # connect to Arduino bluetooth module
 s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
@@ -50,6 +52,12 @@ while True:
     time.sleep(2)
     s.send(str(robot_move).encode())
     print("SENT TO ROBOT!")
+
+    # check to see if a win is inevitable
+    # if so, play "We Are The Champions" like a living legend
+    if (move_score > 900000) and not champion:
+        playsound("C:\Users\snels\Music\Queen - We Are The Champions.mp3", False) # TEST THIS
+        champion = True
 
     # check move_score for ai win
     if move_score == 999999:
