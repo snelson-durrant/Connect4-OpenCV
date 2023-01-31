@@ -3,6 +3,7 @@ import time
 from connect4ai import *
 from connect4opencv import *
 from playsound import playsound
+import threading
 
 HC05_ADDRESS = "98:d3:41:f5:ca:2a"
 PORT = 1
@@ -22,6 +23,11 @@ print("BLUETOOTH CONNECTION SUCCESSFUL!")
 # connect to camera
 vid = cv.VideoCapture(CAMERA_ID)
 print("CAMERA CONNECTION SUCCESSFUL!")
+
+
+def playmusic():
+    playsound("C:/Users/snels/Music/champions.mp3")
+
 
 while True:
 
@@ -56,7 +62,8 @@ while True:
     # check to see if a win is inevitable
     # if so, play "We Are The Champions" like a living legend
     if (move_score > 900000) and not champion:
-        playsound("C:\Users\snels\Music\Queen - We Are The Champions.mp3", False) # TEST THIS
+        music = threading.Thread(target=playmusic, args=(), daemon=True)
+        music.start()
         champion = True
 
     # check move_score for ai win
