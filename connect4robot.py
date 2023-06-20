@@ -63,6 +63,7 @@ while True:
     # if so, play "We Are The Champions" like a living legend
     if (move_score > 900000) and not champion:
         music = threading.Thread(target=playmusic, args=(), daemon=True)
+        print("WE ARE THE CHAMPIONS!")
         music.start()
         champion = True
 
@@ -80,4 +81,6 @@ print("GAME OVER!")
 time.sleep(2)
 vid.release()
 cv.destroyAllWindows()
+
+input("press any key to exit")
 s.close()
