@@ -65,18 +65,18 @@ while True:
     print("SENT TO ROBOT!")
 
     # check to see if a win is inevitable
-    # if so, play "We Are The Champions" like a living legend
+    # if so, play the song "We Are The Champions" by Queen
     if (move_score > 900000) and not champion:
         music = threading.Thread(target=playwinmusic, args=(), daemon=True)
-        print("WE ARE THE CHAMPIONS")
+        print("playing 'We Are The Champions' by QUEEN")
         music.start()
         champion = True
 
     # check to see if a loss is inevitable
-    # if so, play "Fix You" like a broken-hearted robot
+    # if so, play the song "Fix You" by Coldplay
     if (move_score < -900000) and not loss:
         music = threading.Thread(target=playlosemusic, args=(), daemon=True)
-        print("FIX YOU")
+        print("playing 'Fix You' by COLDPLAY")
         music.start()
         loss = True
 
@@ -95,5 +95,5 @@ time.sleep(2)
 vid.release()
 cv.destroyAllWindows()
 
-input("press any key to exit")
+input("PRESS ANY KEY TO EXIT")
 s.close()
