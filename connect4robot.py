@@ -14,6 +14,7 @@ prev_board = game_board
 board_valid = False
 diff = 1
 champion = False
+loss = False
 
 # connect to Arduino bluetooth module
 s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
@@ -25,8 +26,12 @@ vid = cv.VideoCapture(CAMERA_ID)
 print("CAMERA CONNECTION SUCCESSFUL!")
 
 
-def playmusic():
+def playwinmusic():
     playsound("C:/Users/snels/Music/champions.mp3")
+
+
+def playlosemusic():
+    playsound("C:/Users/snels/Music/fixyou.mp3")
 
 
 while True:
@@ -62,10 +67,18 @@ while True:
     # check to see if a win is inevitable
     # if so, play "We Are The Champions" like a living legend
     if (move_score > 900000) and not champion:
-        music = threading.Thread(target=playmusic, args=(), daemon=True)
-        print("WE ARE THE CHAMPIONS!")
+        music = threading.Thread(target=playwinmusic, args=(), daemon=True)
+        print("WE ARE THE CHAMPIONS")
         music.start()
         champion = True
+
+    # check to see if a loss is inevitable
+    # if so, play "Fix You" like a broken-hearted robot
+    if (move_score < -900000) and not loss:
+        music = threading.Thread(target=playlosemusic, args=(), daemon=True)
+        print("FIX YOU")
+        music.start()
+        loss = True
 
     # check move_score for ai win
     if move_score == 999999:
