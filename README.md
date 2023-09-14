@@ -1,7 +1,7 @@
 [![Connect 4 Robot](http://img.youtube.com/vi/lbCc1O47Izo/0.jpg)](http://www.youtube.com/watch?v=lbCc1O47Izo "Connect 4 Robot")
 \
 \
-This is code I wrote for a custom-built robotic arm that plays a human opponent in Connect 4. There are four parts:\
+This repository contains code I wrote for a custom-built robotic arm that plays a human opponent in Connect 4. There are four parts:\
 &nbsp;&nbsp;&nbsp;&nbsp;(1) connect4ai.py - *runs analysis on the current board state and determines the next move*\
 &nbsp;&nbsp;&nbsp;&nbsp;(2) connect4opencv.py - *converts the video stream into a processable board state representation*\
 &nbsp;&nbsp;&nbsp;&nbsp;(3) connect4robot.py - *sets up connections and communicates with the microcontroller over bluetooth*\
